@@ -14,10 +14,10 @@ Uses PyTorch 2.0.1, CUDA 11.7.
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
   
-* Create the `cache` directory (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
-  mkdir cache
+  mkdir cache triton
   ```
 
 * Launch docker container
@@ -29,15 +29,16 @@ Uses PyTorch 2.0.1, CUDA 11.7.
     --shm-size 8G \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
+    -v `pwd`/triton:/.triton \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7
   ```
 
 ### Docker hub
   
-* Create the `cache` directory (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
-  mkdir cache
+  mkdir cache triton
   ```
 
 * Launch docker container
@@ -49,6 +50,7 @@ Uses PyTorch 2.0.1, CUDA 11.7.
     --shm-size 8G \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
+    -v `pwd`/triton:/.triton \
     -it waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7
   ```
 

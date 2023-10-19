@@ -14,7 +14,7 @@ Uses PyTorch 1.8.1, CUDA 11.1.
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
   
-* Create the `cache` and `triton `directories (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
   mkdir cache triton
@@ -35,7 +35,7 @@ Uses PyTorch 1.8.1, CUDA 11.1.
 
 ### Docker hub
   
-* Create the `cache` and `triton` directories (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
   mkdir cache triton
