@@ -29,5 +29,6 @@ RUN pip install --no-cache-dir timm==0.9.2 xformers==0.0.20 && \
     pip install --no-cache-dir peft==0.4.0 && \
     pip install --no-cache-dir trl==0.4.7 && \
     pip install --no-cache-dir deepspeed==0.10.1
+RUN pip install --no-cache-dir sentencepiece=0.1.99
 
 COPY bash.bashrc /etc/bash.bashrc

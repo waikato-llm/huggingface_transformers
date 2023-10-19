@@ -29,6 +29,7 @@ RUN pip install --no-cache-dir \
         deepspeed==0.4.0 \
         "pandas<1.5.0" \
         "protobuf==3.20.*"
+RUN pip install --no-cache-dir sentencepiece=0.1.99
 
 COPY bash.bashrc /etc/bash.bashrc
 
