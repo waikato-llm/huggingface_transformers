@@ -22,7 +22,7 @@ def interact(model_dir, max_new_tokens=100, do_sample=True, top_k=50, top_p=0.95
     model = RemBertForCausalLM.from_pretrained(model_dir, config=config)
 
     while True:
-        print("\nPlease enter the text to complete:")
+        print("\nPlease enter the text to complete (Ctrl+C to exit):")
         prompt = input()
         inputs = tokenizer(prompt, return_tensors="pt").input_ids
         outputs = model.generate(inputs, max_new_tokens=max_new_tokens, do_sample=do_sample, top_k=top_k, top_p=top_p)
