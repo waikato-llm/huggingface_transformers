@@ -139,3 +139,14 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 * `rembert_finetune` - for finetuning a RemBERT model (calls `/opt/rembert/rembert_finetune.py`)
 * `rembert_interact` - lets the user interact with a RemBERT model (calls `/opt/rembert/rembert_interact.py`)
+* `rembert_poll` - batch processing via file-polling of JSON prompt files (calls `/opt/rembert/rembert_poll.py`)
+* `rembert_redis` - processing of JSON prompts via Redis (calls `/opt/rembert/rembert_redis.py`)
+
+
+### Prompt format
+
+```json
+{
+  "prompt": "the prompt text."
+}
+```

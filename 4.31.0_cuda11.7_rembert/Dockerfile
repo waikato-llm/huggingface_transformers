@@ -10,5 +10,7 @@ COPY bash.bashrc /etc/bash.bashrc
 COPY *.py /opt/rembert/
 COPY rembert_finetune /usr/local/bin/
 COPY rembert_interact /usr/local/bin/
+COPY rembert_poll /usr/local/bin/
+COPY rembert_redis /usr/local/bin/
 
 ENV PYTHONPATH=/opt/rembert
