@@ -9,9 +9,7 @@ import traceback
 
 from transformers import AutoTokenizer, RemBertConfig, DataCollatorForLanguageModeling, RemBertForCausalLM, TrainingArguments, Trainer
 from datasets import load_dataset
-
-
-MODEL = "google/rembert"
+from rembert_common import MODEL
 
 
 def determine_files(files, file_lists):
@@ -55,7 +53,7 @@ def finetune(train_files, output_dir, resume_from=None, test_size=0.2,
     :type output_dir: str
     :param resume_from: the checkpoint to resume from, can be None
     :type resume_from: str
-    :param test_size: the size of the test set (0-1)
+    :param test_size: the size of the test set (0-1), when not supplying explicit test files
     :type test_size: float
     :param block_size: the block size to use for training
     :type block_size: int
@@ -69,8 +67,7 @@ def finetune(train_files, output_dir, resume_from=None, test_size=0.2,
     :type max_checkpoints: int
     """
     print("--> load dataset")
-    data_dict = load_dataset('text', data_files=train_files)
-    data = data_dict['train']
+    data = load_dataset('text', data_files=train_files, split="train")
     data = data.train_test_split(test_size=test_size)
 
     print("--> preprocess")
@@ -98,7 +95,7 @@ def finetune(train_files, output_dir, resume_from=None, test_size=0.2,
             total_length = (total_length // block_size) * block_size
         # Split by chunks of block_size.
         result = {
-            k: [t[i : i + block_size] for i in range(0, total_length, block_size)]
+            k: [t[i: i + block_size] for i in range(0, total_length, block_size)]
             for k, t in concatenated_examples.items()
         }
         result["labels"] = result["input_ids"].copy()
@@ -164,7 +161,7 @@ def main(args=None):
     print("--> # train files: %d" % len(train_files))
 
     finetune(train_files, parsed.output_dir, resume_from=parsed.resume_from, block_size=parsed.block_size,
-             num_train_epochs=parsed.num_train_epochs, learning_rate=parsed.learning_rate,
+             test_size=parsed.test_size, num_train_epochs=parsed.num_train_epochs, learning_rate=parsed.learning_rate,
              weight_decay=parsed.weight_decay, max_checkpoints=parsed.max_checkpoints)
 
 
@@ -176,6 +173,8 @@ def sys_main() -> int:
     """
     try:
         main()
+        return 0
+    except KeyboardInterrupt:
         return 0
     except Exception:
         print(traceback.format_exc())

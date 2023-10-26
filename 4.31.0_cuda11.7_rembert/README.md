@@ -137,5 +137,5 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 ## Scripts
 
-* `rembert_finetune` - for finetuning a RemBERT model (calls `/opt/rembert/finetune.py`)
-* `rembert_interact` - lets the user interact with a RemBERT model (calls `/opt/rembert/interact.py`)
+* `rembert_finetune` - for finetuning a RemBERT model (calls `/opt/rembert/rembert_finetune.py`)
+* `rembert_interact` - lets the user interact with a RemBERT model (calls `/opt/rembert/rembert_interact.py`)

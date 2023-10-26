@@ -4,22 +4,25 @@
 import argparse
 import traceback
 
-from transformers import AutoTokenizer, RemBertConfig, RemBertForCausalLM
+from rembert_common import MODEL, load_model
 
 
-MODEL = "google/rembert"
-
-
-def interact(model_dir, max_new_tokens=100, do_sample=True, top_k=50, top_p=0.95):
+def interact(repo_or_dir=MODEL, max_new_tokens=100, do_sample=True, top_k=50, top_p=0.95):
     """
     Lets the user interact with a RemBERT model.
+
+    :param repo_or_dir: the huggingface repo or local dir to load the model from
+    :type repo_or_dir: str
+    :param max_new_tokens: the maximum number of new tokens to generate
+    :type max_new_tokens: int
+    :param do_sample: whether to perform sampling
+    :type do_sample: bool
+    :param top_k: top k results to return
+    :type top_k: int
+    :param top_p: the minimum probability for the top k results
+    :type top_p: float
     """
-    print("Loading tokenizer from : %s" % model_dir)
-    tokenizer = AutoTokenizer.from_pretrained(model_dir)
-    config = RemBertConfig.from_pretrained(MODEL)
-    config.is_decoder = True
-    print("Loading model from : %s" % model_dir)
-    model = RemBertForCausalLM.from_pretrained(model_dir, config=config)
+    tokenizer, model = load_model(repo_or_dir)
 
     while True:
         print("\nPlease enter the text to complete (Ctrl+C to exit):")
@@ -46,7 +49,7 @@ def main(args=None):
         description="RemBERT - Let a model finish prompts entered by the user",
         prog="rembert_interact",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--model_dir', type=str, required=True, help='Type of model to load')
+    parser.add_argument('--repo_or_dir', type=str, default=MODEL, required=False, help='The huggingface repo or local dir to load the model from')
     parser.add_argument('--max_new_tokens', type=int, default=100, required=False, help='The maximum number of new tokens to generate.')
     parser.add_argument("--no_sample", action="store_true", required=False, help="Whether to avoid doing sampling.")
     parser.add_argument('--top_k', type=int, default=50, help='Top k results to return.')
@@ -54,8 +57,8 @@ def main(args=None):
     parser.add_argument('--do_sample', action="store_true", help='Sampling when generating.')
     parsed = parser.parse_args(args=args)
 
-    interact(parsed.model_dir, max_new_tokens=parsed.max_new_tokens, do_sample=not parsed.no_sample,
-             top_k=parsed.top_k, top_p=parsed.top_p)
+    interact(repo_or_dir=parsed.repo_or_dir, max_new_tokens=parsed.max_new_tokens,
+             do_sample=not parsed.no_sample, top_k=parsed.top_k, top_p=parsed.top_p)
 
 
 def sys_main() -> int:
@@ -66,6 +69,8 @@ def sys_main() -> int:
     """
     try:
         main()
+        return 0
+    except KeyboardInterrupt:
         return 0
     except Exception:
         print(traceback.format_exc())

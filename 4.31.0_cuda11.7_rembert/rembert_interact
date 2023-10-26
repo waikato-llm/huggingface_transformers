@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 /opt/rembert/interact.py "$@"
+python3 /opt/rembert/rembert_interact.py "$@"
