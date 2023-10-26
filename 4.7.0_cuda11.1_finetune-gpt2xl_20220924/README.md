@@ -15,7 +15,7 @@ Uses PyTorch 1.8.1, CUDA 11.1, finetune-gpt2xl 20220924 (e0b02491d7773af34a4cedb
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
 
-* Create the `cache` and `triton` directories (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
   mkdir cache triton
@@ -37,7 +37,7 @@ Uses PyTorch 1.8.1, CUDA 11.1, finetune-gpt2xl 20220924 (e0b02491d7773af34a4cedb
 
 ### Docker hub
   
-* Create the `cache` and `triton` directories (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
   mkdir cache triton
@@ -62,13 +62,13 @@ Uses PyTorch 1.8.1, CUDA 11.1, finetune-gpt2xl 20220924 (e0b02491d7773af34a4cedb
 * Build the image from Docker file (from within /path_to/huggingface-transformers/4.7.0_cuda11.1_finetune-gpt2xl_20220924)
 
   ```bash
-  docker build -t huggingface-transformers .
+  docker build -t hf_gpt2xl .
   ```
   
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size --net=host 8G -v /local/dir:/container/dir -it huggingface-transformers
+  docker run --gpus=all --shm-size --net=host 8G -v /local/dir:/container/dir -it hf_gpt2xl
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 

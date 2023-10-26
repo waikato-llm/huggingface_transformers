@@ -15,7 +15,7 @@ Uses PyTorch 2.0.1, CUDA 11.7
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
 
-* Create the `cache` directory (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
   mkdir cache triton
@@ -37,7 +37,7 @@ Uses PyTorch 2.0.1, CUDA 11.7
 
 ### Docker hub
   
-* Create the `cache` directory (to house downloaded dataset and models):
+* Create the following directories:
 
   ```bash
   mkdir cache triton
@@ -62,13 +62,13 @@ Uses PyTorch 2.0.1, CUDA 11.7
 * Build the image from Docker file (from within /path_to/huggingface-transformers/4.31.0_cuda11.7_translate)
 
   ```bash
-  docker build -t huggingface-transformers .
+  docker build -t hf_translate .
   ```
   
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size --net=host 8G -v /local/dir:/container/dir -it huggingface-transformers
+  docker run --gpus=all --shm-size --net=host 8G -v /local/dir:/container/dir -it hf_translate
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 

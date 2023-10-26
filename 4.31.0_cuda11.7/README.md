@@ -59,13 +59,13 @@ Uses PyTorch 2.0.1, CUDA 11.7.
 * Build the image from Docker file (from within /path_to/huggingface-transformers/4.31.0_cuda11.7)
 
   ```bash
-  docker build -t huggingface-transformers .
+  docker build -t hf .
   ```
   
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it huggingface-transformers
+  docker run --gpus=all --shm-size 8G -v /local/dir:/container/dir -it hf
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
