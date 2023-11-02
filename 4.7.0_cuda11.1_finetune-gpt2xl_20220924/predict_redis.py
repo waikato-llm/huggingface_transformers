@@ -1,12 +1,8 @@
-import base64
 import json
-import torch
 import traceback
 
-from io import BytesIO
 from datetime import datetime
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
-from PIL import Image
 from predict_common import load_gpt2xl, load_gptneo, predict_gpt2xl, predict_gptneo
 from predict_common import MODEL_TYPES, MODEL_TYPE_GPT2XL, MODEL_TYPE_GPTNEO
 
@@ -33,20 +29,20 @@ def process_prompt(msg_cont):
 
         prompt = d["prompt"] if ("prompt" in d) else ""
 
-        if poller.params.model_type == MODEL_TYPE_GPT2XL:
-            output = predict_gpt2xl(prompt, poller.params.model, poller.params.tokenizer,
-                                    length=poller.params.length, device=poller.params.device,
-                                    temperature=poller.params.temperature, top_p=poller.params.top_p,
-                                    top_k=poller.params.top_k, use_cache=poller.params.use_cache,
-                                    do_sample=poller.params.do_sample)
-        elif poller.params.model_type == MODEL_TYPE_GPTNEO:
-            output = predict_gptneo(prompt, poller.params.model, poller.params.tokenizer,
-                                    length=poller.params.length, device=poller.params.device,
-                                    temperature=poller.params.temperature, top_p=poller.params.top_p,
-                                    top_k=poller.params.top_k, use_cache=poller.params.use_cache,
-                                    do_sample=poller.params.do_sample)
+        if config.model_type == MODEL_TYPE_GPT2XL:
+            output = predict_gpt2xl(prompt, config.model, config.tokenizer,
+                                    length=config.length, device=config.device,
+                                    temperature=config.temperature, top_p=config.top_p,
+                                    top_k=config.top_k, use_cache=config.use_cache,
+                                    do_sample=config.do_sample)
+        elif config.model_type == MODEL_TYPE_GPTNEO:
+            output = predict_gptneo(prompt, config.model, config.tokenizer,
+                                    length=config.length, device=config.device,
+                                    temperature=config.temperature, top_p=config.top_p,
+                                    top_k=config.top_k, use_cache=config.use_cache,
+                                    do_sample=config.do_sample)
         else:
-            raise Exception("Unsupported model type: %s" % poller.params.model_type)
+            raise Exception("Unsupported model type: %s" % config.model_type)
 
         msg_cont.params.redis.publish(msg_cont.params.channel_out, output)
         if config.verbose:
