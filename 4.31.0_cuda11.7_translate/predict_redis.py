@@ -1,12 +1,8 @@
-import base64
 import json
-import torch
 import traceback
 
-from io import BytesIO
 from datetime import datetime
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
-from PIL import Image
 from predict_common import load_model, translate
 
 

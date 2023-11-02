@@ -1,12 +1,9 @@
-import base64
 import json
 import torch
 import traceback
 
-from io import BytesIO
 from datetime import datetime
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
-from PIL import Image
 from falcontune.model import MODEL_CONFIGS
 from falcontune.backend import BACKENDS
 from falcontune.data import make_prompt
