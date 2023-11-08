@@ -124,6 +124,15 @@ docker build -t pytorch-huggingface-transformers:4.31.0_cuda11.7_translate .
   ```
 
 
+### Requirements
+
+```bash
+docker run --rm \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7_translate \
+  pip freeze > requirements.txt
+```
+
+
 ## Permissions
 
 When running the docker container as regular use, you will want to set the correct
