@@ -142,3 +142,7 @@ the container):
 ```bash
 docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
+
+## Scripts
+
+* `qlora` - for finetuning a model (calls `/opt/qlora/qlora.py`)
