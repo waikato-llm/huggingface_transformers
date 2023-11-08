@@ -142,3 +142,8 @@ the container):
 ```bash
 docker run -u $(id -u):$(id -g) -e USER=$USER ...
 ```
+
+## Scripts
+
+* `llama2_finetune` - for finetuning a Llama2 model (calls `/opt/llama2/llama2_finetune.py`)
+* `llama2_interact` - lets the user interact with a Llama2 model (calls `/opt/llama2/llama2_interact.py`)
