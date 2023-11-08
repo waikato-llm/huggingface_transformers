@@ -1,5 +1,7 @@
 FROM waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7
 
+RUN pip install --no-cache-dir evaluate==0.4.0 scikit-learn==1.2.2
+
 WORKDIR /opt
 
 RUN git clone https://github.com/artidoro/qlora.git && \
