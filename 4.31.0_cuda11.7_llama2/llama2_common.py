@@ -107,5 +107,5 @@ def predict(prompt, pipe):
     result = result[0]['generated_text']
     if result is not None:
         if "[/INST]" in result:
-            result = result[result.index("[/INST]")].strip()
+            result = result[0:result.index("[/INST]")].strip()
     return result
