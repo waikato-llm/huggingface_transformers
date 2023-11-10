@@ -18,7 +18,7 @@ from trl import SFTTrainer
 
 def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf", lora_alpha=16, lora_dropout=0.1, lora_r=64,
              num_train_epochs=1.0, save_steps=25, logging_steps=25, learning_rate=2e-4, weight_decay=0.001,
-             max_grad_norm=0.3, warmup_ratio=0.3, dataset_text_field="text"):
+             max_grad_norm=0.3, warmup_ratio=0.3, dataset_text_field="text", max_checkpoints=5):
     """
     Fine-tunes a Llama2 model.
 
@@ -50,6 +50,8 @@ def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf
     :type warmup_ratio: float
     :param dataset_text_field: the field in the jsonlines data with the text to learn from
     :type dataset_text_field: str
+    :param max_checkpoints: the maximum number of checkpoints to keep
+    :type max_checkpoints: int
     """
     print("--> load dataset")
     dataset = load_dataset("json", data_files=train_data, split="train")
@@ -105,6 +107,8 @@ def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf
         warmup_ratio=warmup_ratio,
         group_by_length=True,
         lr_scheduler_type="constant",
+        push_to_hub=False,
+        save_total_limit=max_checkpoints,
     )
 
     # model finetuning
@@ -149,13 +153,15 @@ def main(args=None):
     parser.add_argument('--weight_decay', type=float, metavar="FLOAT", default=0.001, required=False, help='The weight decay to apply.')
     parser.add_argument('--max_grad_norm', type=float, metavar="FLOAT", default=0.3, required=False, help='Maximum gradient norm (for gradient clipping).')
     parser.add_argument('--warmup_ratio', type=float, metavar="FLOAT", default=0.3, required=False, help='Ratio of total training steps used for a linear warmup from 0 to learning_rate.')
+    parser.add_argument('--max_checkpoints', type=int, metavar="INT", default=5, help='The maximum number of checkpoints to keep.')
     parser.add_argument('--output_dir', required=False, metavar="DIR", type=str, default="./output", help='The directory to store the checkpoints and model in.')
     parsed = parser.parse_args(args=args)
     finetune(parsed.train_data, parsed.output_dir, base_model=parsed.base_model,
              lora_alpha=parsed.lora_alpha, lora_dropout=parsed.lora_dropout, lora_r=parsed.lora_r,
              num_train_epochs=parsed.num_train_epochs, save_steps=parsed.save_steps, logging_steps=parsed.logging_steps,
              learning_rate=parsed.learning_rate, weight_decay=parsed.weight_decay, max_grad_norm=parsed.max_grad_norm,
-             warmup_ratio=parsed.warmup_ratio, dataset_text_field=parsed.dataset_text_field)
+             warmup_ratio=parsed.warmup_ratio, dataset_text_field=parsed.dataset_text_field,
+             max_checkpoints=parsed.max_checkpoints)
 
 
 def sys_main() -> int:
