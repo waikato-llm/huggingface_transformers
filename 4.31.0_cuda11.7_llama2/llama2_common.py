@@ -107,5 +107,6 @@ def predict(prompt, pipe):
     result = result[0]['generated_text']
     if result is not None:
         if "[/INST]" in result:
-            result = result[0:result.index("[/INST]")].strip()
+            result = result.replace("[/INST]", "\t")
+            result = result[result.index("\t"):].strip()
     return result
