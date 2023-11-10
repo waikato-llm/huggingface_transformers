@@ -103,7 +103,6 @@ def predict(prompt, pipe):
     :param pipe: the prediction pipeline to use
     :return: the generated answer
     """
-    prompt = input("\nPlease enter the text to complete by Llama2 (Ctrl+C to exit): ")
     result = pipe(f"<s>[INST] {prompt} [/INST]")
     result = result[0]['generated_text']
     if result is not None:
