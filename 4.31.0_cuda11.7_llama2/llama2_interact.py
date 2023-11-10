@@ -2,14 +2,7 @@
 # https://www.datacamp.com/tutorial/fine-tuning-llama-2
 import argparse
 import traceback
-import torch
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    BitsAndBytesConfig,
-    pipeline,
-)
-from peft import PeftModel
+from llama2_common import load_finetuned_model, build_pipeline, predict
 
 
 def interact(model_dir, base_model="NousResearch/Llama-2-7b-chat-hf", max_length=200):
@@ -23,32 +16,14 @@ def interact(model_dir, base_model="NousResearch/Llama-2-7b-chat-hf", max_length
     :param max_length: the maximum length for the responses
     :type max_length: int
     """
-    print("--> loading llama 2 model")
-    compute_dtype = getattr(torch, "float16")
-    quant_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=compute_dtype,
-        bnb_4bit_use_double_quant=False,
-    )
-    model = AutoModelForCausalLM.from_pretrained(
-        base_model,
-        quantization_config=quant_config,
-        device_map={"": 0}
-    )
-    new_model = PeftModel.from_pretrained(model, model_dir)
-
-    # loading tokenizer
-    print("--> loading tokenizer")
-    tokenizer = AutoTokenizer.from_pretrained(base_model)  # was missing in tutorial
-    tokenizer.padding_side = "right"
+    model, tokenizer = load_finetuned_model(base_model, model_dir)
 
     # predict
-    pipe = pipeline(task="text-generation", model=new_model, tokenizer=tokenizer, max_length=max_length)
+    pipe = build_pipeline(model, tokenizer, max_length=max_length)
     while True:
         prompt = input("\nPlease enter the text to complete by Llama2 (Ctrl+C to exit): ")
-        result = pipe(f"<s>[INST] {prompt} [/INST]")
-        print(result[0]['generated_text'])
+        answer = predict(prompt, pipe)
+        print(answer)
 
 
 def main(args=None):

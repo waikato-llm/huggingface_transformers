@@ -14,6 +14,7 @@ from transformers import (
 )
 from peft import LoraConfig
 from trl import SFTTrainer
+from llama2_common import get_4bit_quant_config, load_base_model, load_base_tokenizer
 
 
 def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf", lora_alpha=16, lora_dropout=0.1, lora_r=64,
@@ -56,29 +57,13 @@ def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf
     print("--> load dataset")
     dataset = load_dataset("json", data_files=train_data, split="train")
 
-    # 4-bit quantization
-    compute_dtype = getattr(torch, "float16")
-    quant_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=compute_dtype,
-        bnb_4bit_use_double_quant=False,
-    )
-
     # loading llama 2 model
-    print("--> loading llama 2 model")
-    model = AutoModelForCausalLM.from_pretrained(
-        base_model,
-        quantization_config=quant_config,
-        device_map={"": 0}
-    )
+    model = load_base_model(base_model)
     model.config.use_cache = False
     model.config.pretraining_tp = 1
 
     # loading tokenizer
-    print("--> loading tokenizer")
-    tokenizer = AutoTokenizer.from_pretrained(base_model)  # was missing in tutorial
-    tokenizer.padding_side = "right"
+    tokenizer = load_base_tokenizer(base_model)
 
     # peft parameters
     peft_params = LoraConfig(
@@ -107,6 +92,7 @@ def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf
         warmup_ratio=warmup_ratio,
         group_by_length=True,
         lr_scheduler_type="constant",
+        report_to="tensorboard",
         push_to_hub=False,
         save_total_limit=max_checkpoints,
     )

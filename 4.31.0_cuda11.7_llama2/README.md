@@ -147,3 +147,13 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 * `llama2_finetune` - for finetuning a Llama2 model (calls `/opt/llama2/llama2_finetune.py`)
 * `llama2_interact` - lets the user interact with a Llama2 model (calls `/opt/llama2/llama2_interact.py`)
+* `llama2_redis` - processing of JSON prompts via Redis (calls `/opt/llama2/llama2_redis.py`)
+
+
+### Prompt format
+
+```json
+{
+  "prompt": "the prompt text."
+}
+```
