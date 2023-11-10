@@ -17,7 +17,7 @@ from trl import SFTTrainer
 
 
 def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf", lora_alpha=16, lora_dropout=0.1, lora_r=64,
-             num_train_epochs=1.0, save_steps=25, logging_steps=25, learning_rate=2e-4, weight_decay=0.001,
+             num_train_epochs=1.0, save_steps=100, logging_steps=100, learning_rate=2e-4, weight_decay=0.001,
              max_grad_norm=0.3, warmup_ratio=0.3, dataset_text_field="text", max_checkpoints=5):
     """
     Fine-tunes a Llama2 model.
@@ -147,8 +147,8 @@ def main(args=None):
     parser.add_argument('--lora_dropout', metavar="FLOAT", type=float, default=0.1, required=False, help='The lora dropout')
     parser.add_argument('--lora_r', type=int, metavar="INT", default=64, required=False, help='The lora attention dimension.')
     parser.add_argument('--num_train_epochs', type=float, metavar="FLOAT", default=1.0, required=False, help='The number of training epochs to perform.')
-    parser.add_argument('--save_steps', type=int, metavar="INT", default=25, required=False, help='Number of updates steps before two checkpoint saves.')
-    parser.add_argument('--logging_steps', type=int, metavar="INT", default=25, required=False, help='Number of update steps between two logs.')
+    parser.add_argument('--save_steps', type=int, metavar="INT", default=100, required=False, help='Number of updates steps before two checkpoint saves.')
+    parser.add_argument('--logging_steps', type=int, metavar="INT", default=100, required=False, help='Number of update steps between two logs.')
     parser.add_argument('--learning_rate', type=float, metavar="FLOAT", default=2e-4, required=False, help='The learning rate to use.')
     parser.add_argument('--weight_decay', type=float, metavar="FLOAT", default=0.001, required=False, help='The weight decay to apply.')
     parser.add_argument('--max_grad_norm', type=float, metavar="FLOAT", default=0.3, required=False, help='Maximum gradient norm (for gradient clipping).')
