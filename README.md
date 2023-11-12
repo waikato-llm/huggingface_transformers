@@ -5,7 +5,7 @@ Docker images for [Huggingface transformers](https://github.com/huggingface/tran
 Available versions:
 
 * 4.35.0
-  * [CUDA 12.1](4.35.0_cuda12.1)
+  * [CUDA 11.7](4.35.0_cuda11.7)
 
 * 4.31.0
   * [CUDA 11.7](4.31.0_cuda11.7)

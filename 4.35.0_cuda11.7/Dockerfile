@@ -1,5 +1,5 @@
-ARG PYTORCH="2.1.0"
-ARG CUDA="12.1"
+ARG PYTORCH="2.0.1"
+ARG CUDA="11.7"
 ARG CUDNN="8"
 
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
@@ -7,7 +7,7 @@ FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-deve
 
 # update NVIDIA repo key
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-ARG distro=ubuntu1804
+ARG distro=ubuntu2004
 ARG arch=x86_64
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
 
