@@ -94,19 +94,22 @@ def build_pipeline(model, tokenizer, max_length=200):
     return pipeline(task="text-generation", model=model, tokenizer=tokenizer, max_length=max_length)
 
 
-def predict(prompt, pipe):
+def predict(prompt, pipe, raw=False):
     """
     Presents the prompt to the model and returns the generated answer.
 
     :param prompt: the prompt to send
     :type prompt: str
     :param pipe: the prediction pipeline to use
+    :param raw: whether to return the raw response
+    :type raw: bool
     :return: the generated answer
     """
     result = pipe(f"<s>[INST] {prompt} [/INST]")
     result = result[0]['generated_text']
-    if result is not None:
-        if "[/INST]" in result:
-            result = result.replace("[/INST]", "\t")
-            result = result[result.index("\t"):].strip()
+    if not raw:
+        if result is not None:
+            if "[/INST]" in result:
+                result = result.replace("[/INST]", "\t")
+                result = result[result.index("\t"):].strip()
     return result

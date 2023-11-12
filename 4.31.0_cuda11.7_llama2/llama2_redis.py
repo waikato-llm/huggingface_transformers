@@ -23,7 +23,7 @@ def process_prompt(msg_cont):
         d = json.loads(msg_cont.message['data'].decode())
 
         prompt = d["prompt"] if ("prompt" in d) else ""
-        output = predict(prompt, config.pipe)
+        output = predict(prompt, config.pipe, raw=config.raw)
         if output is None:
             output = ""
 
@@ -52,6 +52,7 @@ def main(args=None):
     parser.add_argument('--model_dir', metavar="PATH", type=str, required=True, help='The dir with the fine-tuned model.')
     parser.add_argument('--base_model', metavar="NAME_OR_PATH", type=str, default="NousResearch/Llama-2-7b-chat-hf", required=False, help='The name/dir base model to use')
     parser.add_argument('--max_length', metavar="INT", type=int, default=200, required=False, help='The maximum length for the responses.')
+    parser.add_argument('--raw', action="store_true", required=False, help='Whether to output the raw response from the model.')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
     parsed = parser.parse_args(args=args)
@@ -64,6 +65,7 @@ def main(args=None):
     config.model = model
     config.tokenizer = tokenizer
     config.max_length = parsed.max_length
+    config.raw = parsed.raw
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)

@@ -5,7 +5,7 @@ import traceback
 from llama2_common import load_finetuned_model, build_pipeline, predict
 
 
-def interact(model_dir, base_model="NousResearch/Llama-2-7b-chat-hf", max_length=200):
+def interact(model_dir, base_model="NousResearch/Llama-2-7b-chat-hf", max_length=200, raw=False):
     """
     For interacting with the llama2 model in the console.
 
@@ -15,6 +15,8 @@ def interact(model_dir, base_model="NousResearch/Llama-2-7b-chat-hf", max_length
     :type base_model: str
     :param max_length: the maximum length for the responses
     :type max_length: int
+    :param raw: whether to return the raw response
+    :type raw: bool
     """
     model, tokenizer = load_finetuned_model(base_model, model_dir)
 
@@ -22,7 +24,7 @@ def interact(model_dir, base_model="NousResearch/Llama-2-7b-chat-hf", max_length
     pipe = build_pipeline(model, tokenizer, max_length=max_length)
     while True:
         prompt = input("\nPlease enter the text to complete by Llama2 (Ctrl+C to exit): ")
-        answer = predict(prompt, pipe)
+        answer = predict(prompt, pipe, raw=raw)
         print(answer)
 
 
@@ -40,6 +42,7 @@ def main(args=None):
     parser.add_argument('--model_dir', metavar="PATH", type=str, required=True, help='The dir with the fine-tuned model.')
     parser.add_argument('--base_model', metavar="NAME_OR_PATH", type=str, default="NousResearch/Llama-2-7b-chat-hf", required=False, help='The name/dir base model to use')
     parser.add_argument('--max_length', metavar="INT", type=int, default=200, required=False, help='The maximum length for the responses.')
+    parser.add_argument('--raw', action="store_true", required=False, help='Whether to output the raw response from the model.')
     parsed = parser.parse_args(args=args)
     interact(parsed.model_dir, base_model=parsed.base_model, max_length=parsed.max_length)
 
