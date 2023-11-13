@@ -1,4 +1,4 @@
-# Huggingface transformers (QLoRA)
+# Huggingface transformers (Llama2)
 
 Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.31.0
 that contains support for [Llama2](https://www.datacamp.com/tutorial/fine-tuning-llama-2).
