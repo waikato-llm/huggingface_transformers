@@ -63,7 +63,7 @@ def finetune(train_data, output_dir, base_model="mistralai/Mistral-7B-v0.1", lor
     model.gradient_checkpointing_enable()
 
     # loading tokenizer
-    tokenizer = load_base_tokenizer(base_model, trust_remote_code=True)
+    tokenizer = load_base_tokenizer(base_model)
 
     # peft parameters
     peft_params = LoraConfig(
