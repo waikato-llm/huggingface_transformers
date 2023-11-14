@@ -127,7 +127,7 @@ docker build -t pytorch-huggingface-transformers:4.31.0_cuda11.7_qlora_20230724 
 ### Requirements
 
 ```bash
-docker run --rm \
+docker run --rm --pull=always \
   -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.31.0_cuda11.7_qlora_20230724 \
   pip freeze > requirements.txt
 ```

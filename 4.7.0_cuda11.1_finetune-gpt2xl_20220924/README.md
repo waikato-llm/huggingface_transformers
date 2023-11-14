@@ -127,7 +127,7 @@ docker build -t pytorch-huggingface-transformers:4.7.0_cuda11.1_finetune-gpt2xl_
 ### Requirements
 
 ```bash
-docker run --rm \
+docker run --rm --pull=always \
   -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.7.0_cuda11.1_finetune-gpt2xl_20220924 \
   pip freeze > requirements.txt
 ```
