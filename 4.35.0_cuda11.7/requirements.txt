@@ -9,7 +9,7 @@ async-timeout==4.0.3
 attrs==23.1.0
 backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
 beautifulsoup4 @ file:///croot/beautifulsoup4-split_1681493039619/work
-bitsandbytes==0.39.0
+bitsandbytes==0.41.0
 boltons @ file:///croot/boltons_1677628692245/work
 brotlipy==0.7.0
 cachetools==5.3.2
@@ -86,8 +86,8 @@ pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycosat @ file:///croot/pycosat_1666805502580/work
 pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
-pydantic==2.4.2
-pydantic_core==2.10.1
+pydantic==2.5.0
+pydantic_core==2.14.1
 Pygments @ file:///croot/pygments_1683671804183/work
 pynvml==11.5.0
 pyOpenSSL @ file:///croot/pyopenssl_1677607685877/work
