@@ -64,7 +64,7 @@ def finetune(train_data, output_dir, base_model="mistralai/Mistral-7B-v0.1", lor
     model = prepare_model_for_kbit_training(model)
 
     # loading tokenizer
-    tokenizer = load_base_tokenizer(base_model, trust_remote_code=True)
+    tokenizer = load_base_tokenizer(base_model)
 
     # peft parameters
     peft_params = LoraConfig(
