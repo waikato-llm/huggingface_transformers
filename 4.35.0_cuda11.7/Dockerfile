@@ -20,7 +20,7 @@ RUN apt-get update && \
 RUN pip install --no-cache-dir transformers==4.35.0
 RUN pip install --no-cache-dir timm==0.9.9 xformers==0.0.22 && \
     pip install --no-cache-dir einops==0.7.0 accelerate==0.20.3 && \
-    pip install --no-cache-dir bitsandbytes==0.41.0 && \
+    pip install --no-cache-dir bitsandbytes==0.41.2.post2 && \
     pip install --no-cache-dir scipy==1.11.3 && \
     pip install --no-cache-dir datasets==2.14.6 && \
     pip install --no-cache-dir peft==0.6.1 && \
