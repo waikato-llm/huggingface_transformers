@@ -9,7 +9,7 @@ async-timeout==4.0.3
 attrs==23.1.0
 backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
 beautifulsoup4 @ file:///croot/beautifulsoup4-split_1681493039619/work
-bitsandbytes==0.41.0
+bitsandbytes==0.41.2.post2
 boltons @ file:///croot/boltons_1677628692245/work
 brotlipy==0.7.0
 cachetools==5.3.2
