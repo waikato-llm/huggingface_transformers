@@ -11,7 +11,7 @@ from transformers import (
     pipeline,
     logging,
 )
-from peft import LoraConfig
+from peft import LoraConfig, prepare_model_for_kbit_training, get_peft_model
 from trl import SFTTrainer
 from mistral_common import load_base_model, load_base_tokenizer
 
@@ -61,6 +61,7 @@ def finetune(train_data, output_dir, base_model="mistralai/Mistral-7B-v0.1", lor
     model.config.use_cache = False
     model.config.pretraining_tp = 1
     model.gradient_checkpointing_enable()
+    model = prepare_model_for_kbit_training(model)
 
     # loading tokenizer
     tokenizer = load_base_tokenizer(base_model, trust_remote_code=True)
@@ -74,13 +75,7 @@ def finetune(train_data, output_dir, base_model="mistralai/Mistral-7B-v0.1", lor
         task_type="CAUSAL_LM",
         target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj"]
     )
-    peft_params = LoraConfig(
-        lora_alpha=lora_alpha,
-        lora_dropout=lora_dropout,
-        r=lora_r,
-        bias="none",
-        task_type="CAUSAL_LM",
-    )
+    model = get_peft_model(model, peft_params)
 
     # training parameters
     training_params = TrainingArguments(
