@@ -1,4 +1,4 @@
-# Huggingface transformers (falcontune)
+# Huggingface transformers (RemBERT)
 
 Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.31.0
 that contains support for [RemBERT](https://huggingface.co/docs/transformers/v4.31.0/en/model_doc/rembert) 
