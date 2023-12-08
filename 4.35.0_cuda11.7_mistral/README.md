@@ -1,4 +1,4 @@
-# Huggingface transformers (QLoRA)
+# Huggingface transformers (mistral)
 
 Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.35.0
 that contains support for [Mistral 7B](https://gathnex.medium.com/mistral-7b-fine-tuning-a-step-by-step-guide-52122cdbeca8).
