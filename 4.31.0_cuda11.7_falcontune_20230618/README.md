@@ -40,7 +40,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
 * Create the following directories:
 
   ```bash
-  mkdir cache config
+  mkdir cache config triton
   ```
 
 * Launch docker container
@@ -54,6 +54,7 @@ Uses PyTorch 2.0.1, CUDA 11.7, falcontune 20230618 (6bd029e5a89f58c4eea9056ee1c8
     -v `pwd`:/workspace \
     -v `pwd`/config:/.config \
     -v `pwd`/cache:/.cache \
+    -v `pwd`/triton:/.triton \
     -it waikatodatamining/pytorch-huggingface-transformers:4.31.0_cuda11.7_falcontune_20230618
   ```
 
