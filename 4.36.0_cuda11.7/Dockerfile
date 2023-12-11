@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir timm==0.9.9 xformers==0.0.22 && \
     pip install --no-cache-dir scipy==1.11.3 && \
     pip install --no-cache-dir datasets==2.14.6 && \
     pip install --no-cache-dir peft==0.6.1 && \
-    pip install --no-cache-dir trl==0.7.2 && \
+    pip install --no-cache-dir git+https://github.com/huggingface/trl.git@393dbf67494771170cb8fede30b6e77c39d85841 && \
     pip install --no-cache-dir deepspeed==0.11.2 && \
     pip install --no-cache-dir sentencepiece==0.1.99 "protobuf==3.20.*" && \
     pip install --no-cache-dir "tensorboard==2.15.1"
