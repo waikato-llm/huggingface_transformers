@@ -14,12 +14,13 @@ from transformers import (
 )
 from peft import LoraConfig
 from trl import SFTTrainer
-from llama2_common import get_4bit_quant_config, load_base_model, load_base_tokenizer
+from llama2_common import load_base_model, load_base_tokenizer
 
 
 def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf", lora_alpha=16, lora_dropout=0.1, lora_r=64,
              num_train_epochs=1.0, save_steps=100, logging_steps=100, learning_rate=2e-4, weight_decay=0.001,
-             max_grad_norm=0.3, warmup_ratio=0.3, dataset_text_field="text", max_checkpoints=5):
+             max_grad_norm=0.3, warmup_ratio=0.3, per_device_train_batch_size=4, gradient_accumulation_steps=1,
+             dataset_text_field="text", max_checkpoints=5):
     """
     Fine-tunes a Llama2 model.
 
@@ -49,6 +50,10 @@ def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf
     :type max_grad_norm: float
     :param warmup_ratio: Ratio of total training steps used for a linear warmup from 0 to learning_rate.
     :type warmup_ratio: float
+    :param per_device_train_batch_size: the batch size to use
+    :type per_device_train_batch_size: int
+    :param gradient_accumulation_steps: to increase batch size without using more memory
+    :type gradient_accumulation_steps: int
     :param dataset_text_field: the field in the jsonlines data with the text to learn from
     :type dataset_text_field: str
     :param max_checkpoints: the maximum number of checkpoints to keep
@@ -78,8 +83,8 @@ def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf
     training_params = TrainingArguments(
         output_dir=output_dir,
         num_train_epochs=num_train_epochs,
-        per_device_train_batch_size=4,
-        gradient_accumulation_steps=1,
+        per_device_train_batch_size=per_device_train_batch_size,
+        gradient_accumulation_steps=gradient_accumulation_steps,
         optim="paged_adamw_32bit",
         save_steps=save_steps,
         logging_steps=logging_steps,
@@ -139,6 +144,8 @@ def main(args=None):
     parser.add_argument('--weight_decay', type=float, metavar="FLOAT", default=0.001, required=False, help='The weight decay to apply.')
     parser.add_argument('--max_grad_norm', type=float, metavar="FLOAT", default=0.3, required=False, help='Maximum gradient norm (for gradient clipping).')
     parser.add_argument('--warmup_ratio', type=float, metavar="FLOAT", default=0.3, required=False, help='Ratio of total training steps used for a linear warmup from 0 to learning_rate.')
+    parser.add_argument('--per_device_train_batch_size', type=int, metavar="INT", default=4, help='The batch size per device for training.')
+    parser.add_argument('--gradient_accumulation_steps', type=int, metavar="INT", default=1, help='Number of updates steps to accumulate the gradients for, before performing a backward/update pass.')
     parser.add_argument('--max_checkpoints', type=int, metavar="INT", default=5, help='The maximum number of checkpoints to keep.')
     parser.add_argument('--output_dir', required=False, metavar="DIR", type=str, default="./output", help='The directory to store the checkpoints and model in.')
     parsed = parser.parse_args(args=args)
@@ -146,7 +153,8 @@ def main(args=None):
              lora_alpha=parsed.lora_alpha, lora_dropout=parsed.lora_dropout, lora_r=parsed.lora_r,
              num_train_epochs=parsed.num_train_epochs, save_steps=parsed.save_steps, logging_steps=parsed.logging_steps,
              learning_rate=parsed.learning_rate, weight_decay=parsed.weight_decay, max_grad_norm=parsed.max_grad_norm,
-             warmup_ratio=parsed.warmup_ratio, dataset_text_field=parsed.dataset_text_field,
+             warmup_ratio=parsed.warmup_ratio, per_device_train_batch_size=parsed.per_device_train_batch_size,
+             gradient_accumulation_steps=parsed.gradient_accumulation_steps, dataset_text_field=parsed.dataset_text_field,
              max_checkpoints=parsed.max_checkpoints)
 
 
