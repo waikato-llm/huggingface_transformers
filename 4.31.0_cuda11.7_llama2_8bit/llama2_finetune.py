@@ -53,6 +53,8 @@ def finetune(train_data, output_dir, base_model="NousResearch/Llama-2-7b-chat-hf
     :type per_device_train_batch_size: int
     :param gradient_accumulation_steps: to increase batch size without using more memory
     :type gradient_accumulation_steps: int
+    :param quantization: the quantization to use (4bit/8bit)
+    :type quantization: str
     :param dataset_text_field: the field in the jsonlines data with the text to learn from
     :type dataset_text_field: str
     :param max_checkpoints: the maximum number of checkpoints to keep
