@@ -7,6 +7,7 @@ Available versions:
 * 4.36.0
   * [CUDA 11.7](4.36.0_cuda11.7)
   * [CUDA 11.7 Mistral](4.36.0_cuda11.7_mistral)
+  * [CUDA 11.7 Classification](4.36.0_cuda11.7_classification)
 
 * 4.35.0
   * [CUDA 11.7](4.35.0_cuda11.7)

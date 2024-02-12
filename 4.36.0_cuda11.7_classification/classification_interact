@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 /opt/mistral/mistral_interact.py "$@"
