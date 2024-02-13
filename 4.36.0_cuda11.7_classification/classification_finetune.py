@@ -91,7 +91,7 @@ def finetune(train_data, label_map, output_dir, test_data=None, test_size=0.2, b
         weight_decay=weight_decay,
         save_steps=save_steps,
         logging_steps=logging_steps,
-        max_checkpoints=max_checkpoints,
+        save_total_limit=max_checkpoints,
         evaluation_strategy="epoch",
         save_strategy="epoch",
         push_to_hub=False,
