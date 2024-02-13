@@ -5,7 +5,7 @@ RUN pip install --no-cache-dir \
         redis \
         "redis-docker-harness==0.0.4" \
         evaluate==0.4.1 \
-        scikit-learn=1.4.0
+        scikit-learn==1.4.0
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY *.py /opt/classification/
