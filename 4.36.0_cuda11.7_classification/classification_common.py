@@ -25,4 +25,17 @@ def predict(text, pipe):
     :return: the generated answer (label and score)
     :rtype: dict
     """
-    return pipe(text)
+    pred = pipe(text)
+    if pred is None:
+        return {}
+    if isinstance(pred, list):
+        if len(pred) == 1:
+            result = pred[0]
+        elif len(pred) > 1:
+            print("WARNING: more than one prediction returned, only using first one!")
+            result = pred[0]
+        else:
+            result = {}
+    else:
+        raise Exception("Expected model to return a list of predictions!")
+    return result
