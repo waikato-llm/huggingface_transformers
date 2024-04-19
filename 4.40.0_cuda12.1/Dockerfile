@@ -6,7 +6,7 @@ ARG TORCH_VISION="0.16"
 ARG TORCH_AUDIO="2.1.0"
 
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
-FROM nvidia/cuda:${CUDA}-cudnn${CUDNN}-devel-ubuntu20.04
+FROM ${DOCKER_REGISTRY}nvidia/cuda:${CUDA}-cudnn${CUDNN}-devel-ubuntu20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
