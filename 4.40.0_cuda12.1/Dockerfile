@@ -14,10 +14,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --no-cache-dir -U --extra-index-url https://download.pytorch.org/whl/$PYTORCH_CUDA \
-       "torch==$PYTORCH.*" \
-       "torchvision==$TORCH_VISION.*" \
-       "torchaudio==$TORCH_AUDIO.*"
+RUN python3 -m pip install --no-cache-dir -U --extra-index-url https://download.pytorch.org/whl/${PYTORCH_CUDA} \
+       "torch==${PYTORCH}.*" \
+       "torchvision==${TORCH_VISION}.*" \
+       "torchaudio==${TORCH_AUDIO}.*"
 
 RUN pip install --no-cache-dir transformers==4.40.0
 RUN pip install --no-cache-dir timm==0.9.9 xformers==0.0.22 && \
