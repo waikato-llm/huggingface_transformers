@@ -5,7 +5,7 @@ Docker images for [Huggingface transformers](https://github.com/huggingface/tran
 Available versions:
 
 * 4.40.0
-  * [CUDA 12.1](4.40.0_cuda12.1)
+  * [CUDA 11.7](4.40.0_cuda11.7)
 
 * 4.36.0
   * [CUDA 11.7](4.36.0_cuda11.7)
@@ -27,3 +27,36 @@ Available versions:
 * 4.7.0
   * [CUDA 11.1](4.7.0_cuda11.1)
   * [CUDA 11.1 with finetune-gpt2xl](4.7.0_cuda11.1_finetune-gpt2xl_20220924)
+
+
+## Restricted access
+
+In case models or datasets require being logged into Huggingface, you can give your 
+Docker container access via an access token.
+
+### Create access token
+
+In order to create an access token, do the following:
+- Log into https://huggingface.co
+- Go to *Settings* -> *Access tokens*
+- Create a token (*read* access is sufficient, unless you want to push models back to huggingface)
+- Copy the token onto the clipboard
+- Save the token in a [.env file](https://hexdocs.pm/dotenvy/0.2.0/dotenv-file-format.html), using `HF_TOKEN` as the variable name
+
+### Provide token to container
+
+Add the following parameter to make all the environment variables stored in the `.env` file in 
+the current directory available to your Docker container:
+
+```
+--env-file=`pwd`/.env
+```
+
+### Log into Huggingface
+
+With the `HF_TOKEN` environment variable set, you can now log into Huggingface inside your Docker 
+container using the following command:
+
+```
+huggingface-cli login --token=$HF_TOKEN
+```

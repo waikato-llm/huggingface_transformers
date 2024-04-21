@@ -2,7 +2,7 @@
 
 Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.40.0.
 
-Uses PyTorch 2.1.1, CUDA 12.1.
+Uses PyTorch 2.0.1, CUDA 11.7.
 
 ## Quick start
 
@@ -30,7 +30,7 @@ Uses PyTorch 2.1.1, CUDA 12.1.
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -v `pwd`/triton:/.triton \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda12.1
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda11.7
   ```
 
 ### Docker hub
@@ -51,12 +51,12 @@ Uses PyTorch 2.1.1, CUDA 12.1.
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -v `pwd`/triton:/.triton \
-    -it waikatodatamining/pytorch-huggingface-transformers:4.40.0_cuda12.1
+    -it waikatodatamining/pytorch-huggingface-transformers:4.40.0_cuda11.7
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/huggingface-transformers/4.40.0_cuda12.1)
+* Build the image from Docker file (from within /path_to/huggingface-transformers/4.40.0_cuda11.7)
 
   ```bash
   docker build -t hf .
@@ -75,7 +75,7 @@ Uses PyTorch 2.1.1, CUDA 12.1.
 ### Build
 
 ```bash
-docker build -t pytorch-huggingface-transformers:4.40.0_cuda12.1 .
+docker build -t pytorch-huggingface-transformers:4.40.0_cuda11.7 .
 ```
 
 ### Inhouse registry  
@@ -84,14 +84,14 @@ docker build -t pytorch-huggingface-transformers:4.40.0_cuda12.1 .
 
   ```bash
   docker tag \
-    pytorch-huggingface-transformers:4.40.0_cuda12.1 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda12.1
+    pytorch-huggingface-transformers:4.40.0_cuda11.7 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda11.7
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda12.1
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda11.7
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -105,14 +105,14 @@ docker build -t pytorch-huggingface-transformers:4.40.0_cuda12.1 .
 
   ```bash
   docker tag \
-    pytorch-huggingface-transformers:4.40.0_cuda12.1 \
-    waikatodatamining/pytorch-huggingface-transformers:4.40.0_cuda12.1
+    pytorch-huggingface-transformers:4.40.0_cuda11.7 \
+    waikatodatamining/pytorch-huggingface-transformers:4.40.0_cuda11.7
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-huggingface-transformers:4.40.0_cuda12.1
+  docker push waikatodatamining/pytorch-huggingface-transformers:4.40.0_cuda11.7
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -125,7 +125,7 @@ docker build -t pytorch-huggingface-transformers:4.40.0_cuda12.1 .
 
 ```bash
 docker run --rm --pull=always \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda12.1 \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.0_cuda11.7 \
   pip freeze > requirements.txt
 ```
 
