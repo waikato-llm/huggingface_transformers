@@ -6,6 +6,7 @@ Available versions:
 
 * 4.40.0
   * [CUDA 11.7](4.40.0_cuda11.7)
+  * [CUDA 11.7 langchain](4.40.0_cuda11.7_langchain)
 
 * 4.36.0
   * [CUDA 11.7](4.36.0_cuda11.7)
