@@ -1,5 +1,5 @@
-ARG PYTORCH="2.2.2"
-ARG CUDA="11.8"
+ARG PYTORCH="2.3.0"
+ARG CUDA="12.1"
 ARG CUDNN="8"
 
 ARG DOCKER_REGISTRY=public.aml-repo.cms.waikato.ac.nz:443/
@@ -7,7 +7,7 @@ FROM ${DOCKER_REGISTRY}pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-deve
 
 # update NVIDIA repo key
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-ARG distro=ubuntu2004
+ARG distro=ubuntu2204
 ARG arch=x86_64
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
 
@@ -18,16 +18,20 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir transformers==4.40.2
-RUN pip install --no-cache-dir timm==0.9.9 xformers==0.0.22 && \
-    pip install --no-cache-dir einops==0.7.0 accelerate==0.20.3 && \
-    pip install --no-cache-dir bitsandbytes==0.41.2.post2 && \
-    pip install --no-cache-dir scipy==1.11.3 && \
-    pip install --no-cache-dir datasets==2.14.6 && \
-    pip install --no-cache-dir peft==0.6.1 && \
-    pip install --no-cache-dir git+https://github.com/huggingface/trl.git@393dbf67494771170cb8fede30b6e77c39d85841 && \
-    pip install --no-cache-dir deepspeed==0.11.2 && \
-    pip install --no-cache-dir sentencepiece==0.1.99 "protobuf==3.20.*" && \
-    pip install --no-cache-dir "tensorboard==2.15.1"
+RUN pip install --no-cache-dir \
+      timm==0.9.16 \
+      xformers==0.0.26.post1 \
+      einops==0.8.0 \
+      accelerate==0.30.0 \
+      bitsandbytes==0.43.1 \
+      scipy==1.11.3 \
+      datasets==2.19.1 \
+      peft==0.10.0 \
+      trl==0.8.6 \
+      deepspeed==0.14.2 \
+      sentencepiece==0.2.0 \
+      "protobuf==3.20.*" \
+      "tensorboard==2.15.1"
 
 # original path, which doesn't contain any CUDA libraries:
 # LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64
