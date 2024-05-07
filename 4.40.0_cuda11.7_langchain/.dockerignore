@@ -9,4 +9,4 @@ triton/
 *.iml
 wandb/
 falcon*
-
+*.pdf

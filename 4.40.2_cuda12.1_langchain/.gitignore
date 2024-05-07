@@ -11,4 +11,4 @@ wandb/
 falcon*
 test*.py
 alpaca*
-
+*.pdf
