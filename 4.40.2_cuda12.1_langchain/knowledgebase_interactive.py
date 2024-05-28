@@ -36,9 +36,9 @@ def main(args=None):
         description="knowledgebase - interactive",
         prog="kb_interactive",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--model', type=str, metavar="NAME_OR_DIR", required=True, help='The name or directory of the fine-tuned model')
+    parser.add_argument('--model', type=str, metavar="NAME_OR_DIR", required=False, default="microsoft/Phi-3-mini-4k-instruct", help='The name or directory of the fine-tuned model')
     parser.add_argument('--device', type=str, required=False, default="cuda", help='The device to run the inference on, eg "cuda" or "cpu"')
-    parser.add_argument('--prompt', type=str, required=True, default=DEFAULT_PROMPT, help='The prompt to use.')
+    parser.add_argument('--prompt', type=str, required=False, default=DEFAULT_PROMPT, help='The prompt to use.')
     parser.add_argument('--input', help='The path to the PDF/text file(s) or dir(s) with PDF/text files to load into the vector store and use as context', required=True, default=None, nargs="+")
     parser.add_argument('--chunk_size', type=int, default=4000, help='The size of the chunks to create from the documents.')
     parser.add_argument('--chunk_overlap', type=int, default=20, help='The overlap between the chunks.')
