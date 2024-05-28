@@ -113,7 +113,7 @@ def create_database(inputs: Union[str, List[str]], embeddings: HuggingFaceEmbedd
                     files.append(os.path.join(inp, f))
         else:
             files.append(inp)
-    print("--> %d file(s)" % len(files))
+    print("--> knowledgebase: %d file(s)" % len(files))
 
     # loads files and create chunks
     chunks_total = []
