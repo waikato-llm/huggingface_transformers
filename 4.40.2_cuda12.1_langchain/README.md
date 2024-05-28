@@ -129,6 +129,10 @@ docker run --rm --pull=always \
   pip freeze > requirements.txt
 ```
 
+## Scripts
+
+* `kb_interactive` - for interactively querying the knowledge base of documents
+
 
 ## Permissions
 

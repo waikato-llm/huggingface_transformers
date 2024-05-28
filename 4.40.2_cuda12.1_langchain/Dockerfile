@@ -15,4 +15,5 @@ RUN pip install --no-cache-dir \
 RUN pip install --no-cache-dir --no-build-isolation flash-attn==2.5.8 
 
 COPY bash.bashrc /etc/bash.bashrc
-
+COPY kb_* /usr/bin/
+COPY *.py /opt/knowledgebase/
