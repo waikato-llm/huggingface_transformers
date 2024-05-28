@@ -42,7 +42,7 @@ def main(args=None):
     parser.add_argument('--input', help='The path to the PDF/text file(s) or dir(s) with PDF/text files to load into the vector store and use as context', required=True, default=None, nargs="+")
     parser.add_argument('--chunk_size', type=int, default=4000, help='The size of the chunks to create from the documents.')
     parser.add_argument('--chunk_overlap', type=int, default=20, help='The overlap between the chunks.')
-    parser.add_argument('--persist_directory', help='The directory to store the vector store in', required=False, default="db")
+    parser.add_argument('--db_dir', help='The directory to store the vector store in', required=False, default="db")
     parser.add_argument('--max_new_tokens', type=int, default=300, help='The maximum number of tokens to generate with the pipeline.')
     parser.add_argument('--num_docs', type=int, default=3, help='The number of documents to retrieve from the vector store.')
     parsed = parser.parse_args(args=args)
