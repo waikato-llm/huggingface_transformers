@@ -6,7 +6,8 @@ from typing import Tuple, List, Union
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma, VectorStoreRetriever
+from langchain_community.vectorstores import Chroma
+from langchain_core.vectorstores import VectorStoreRetriever
 from langchain.chains.combine_documents.base import BaseCombineDocumentsChain
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 from transformers import BitsAndBytesConfig
