@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir \
 # https://huggingface.co/docs/transformers/perf_infer_gpu_one#flashattention-2
 RUN pip install --no-cache-dir --no-build-isolation flash-attn==2.5.8 
 
+RUN pip install --no-cache-dir redis && \
+    pip install --no-cache-dir "redis-docker-harness==0.0.4"
+
 COPY bash.bashrc /etc/bash.bashrc
 COPY kb_* /usr/bin/
 COPY *.py /opt/knowledgebase/

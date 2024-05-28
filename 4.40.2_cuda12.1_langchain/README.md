@@ -132,6 +132,7 @@ docker run --rm --pull=always \
 ## Scripts
 
 * `kb_interactive` - for interactively querying the knowledge base of documents
+* `kb_redis` - for querying the knowledge base of documents via Redis
 
 
 ## Permissions

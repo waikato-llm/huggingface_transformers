@@ -1,43 +1,57 @@
-import argparse
+import json
 import traceback
 
+from datetime import datetime
+from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from knowledgebase_common import DEFAULT_PROMPT, load_embeddings, load_tokenizer_and_model, create_prompt_template, create_qa_chain, create_retriever, create_database, create_pipeline, clean_response
 
 
-def query(chain, retriever, raw: bool = False):
+def process_prompt(msg_cont):
     """
-    Lets the user query the document store (used as context).
+    Processes the message container, loading the image from the message and forwarding the predictions.
 
-    :param chain: the Q&A chain to use
-    :param retriever: the document retriever for the vector store
-    :param raw: whether to return the raw answers
-    :type raw: bool
+    :param msg_cont: the message container to process
+    :type msg_cont: MessageContainer
     """
+    config = msg_cont.params.config
+
     def ask(question):
-        context = retriever.invoke(question)
-        return (chain({"input_documents": context, "question": question}, return_only_outputs=True))['output_text']
+        context = config.retriever.invoke(question)
+        return (config.chain({"input_documents": context, "question": question}, return_only_outputs=True))['output_text']
 
-    while True:
-        user_question = input("\nPlease enter your question: ")
-        if (user_question is None) or (user_question == ""):
-            break
-        answer = ask(user_question)
-        answer = clean_response(answer, raw=raw)
-        print("Answer:\n", answer)
+    try:
+        start_time = datetime.now()
+        if config.verbose:
+            log("process_prompts - start processing prompt")
+        # read data
+        d = json.loads(msg_cont.message['data'].decode())
+
+        text = d["prompt"] if ("prompt" in d) else ""
+        answer = ask(text)
+        answer = clean_response(answer, raw=config.raw)
+
+        msg_cont.params.redis.publish(msg_cont.params.channel_out, answer)
+        if config.verbose:
+            log("process_prompts - response string published: %s" % msg_cont.params.channel_out)
+            end_time = datetime.now()
+            processing_time = end_time - start_time
+            processing_time = int(processing_time.total_seconds() * 1000)
+            log("process_prompts - finished processing prompt: %d ms" % processing_time)
+    except KeyboardInterrupt:
+        msg_cont.params.stopped = True
+    except:
+        log("process_prompts - failed to process: %s" % traceback.format_exc())
 
 
 def main(args=None):
     """
-    The main method for parsing command-line arguments and starting the training.
+    Performs the predictions.
+    Use -h to see all options.
 
-    :param args: the commandline arguments, uses sys.argv if not supplied
+    :param args: the command-line arguments to use, uses sys.argv if None
     :type args: list
     """
-
-    parser = argparse.ArgumentParser(
-        description="knowledgebase - interactive",
-        prog="kb_interactive",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser = create_parser('knowledgebase (Redis)', prog="kb_redis", prefix="redis_")
     parser.add_argument('--model', type=str, metavar="NAME_OR_DIR", required=False, default="microsoft/Phi-3-mini-4k-instruct", help='The name or directory of the fine-tuned model')
     parser.add_argument('--device', type=str, required=False, default="cuda", help='The device to run the inference on, eg "cuda" or "cpu"')
     parser.add_argument('--prompt', type=str, required=False, default=DEFAULT_PROMPT, help='The prompt to use.')
@@ -48,6 +62,8 @@ def main(args=None):
     parser.add_argument('--max_new_tokens', type=int, default=300, help='The maximum number of tokens to generate with the pipeline.')
     parser.add_argument('--num_docs', type=int, default=3, help='The number of documents to retrieve from the vector store.')
     parser.add_argument('--raw', action="store_true", help='Whether to return the raw responses rather than attempting to clean them up.')
+    parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
+
     parsed = parser.parse_args(args=args)
 
     embeddings = load_embeddings(parsed.device)
@@ -57,22 +73,19 @@ def main(args=None):
     db = create_database(parsed.input, embeddings, chunk_size=parsed.chunk_size, chunk_overlap=parsed.chunk_overlap, persist_directory=parsed.db_dir)
     retriever = create_retriever(db, num_docs=parsed.num_docs)
     chain = create_qa_chain(pipeline, prompt_template=prompt)
-    query(chain, retriever, raw=parsed.raw)
+
+    config = Container()
+    config.chain = chain
+    config.retriever = retriever
+    config.raw = parsed.raw
+    config.verbose = parsed.verbose
+
+    params = configure_redis(parsed, config=config)
+    run_harness(params, process_prompt)
 
 
-def sys_main() -> int:
-    """
-    Runs the main function using the system cli arguments, and
-    returns a system error code.
-    :return:    0 for success, 1 for failure.
-    """
+if __name__ == "__main__":
     try:
         main()
-        return 0
     except Exception:
         print(traceback.format_exc())
-        return 1
-
-
-if __name__ == '__main__':
-    main()

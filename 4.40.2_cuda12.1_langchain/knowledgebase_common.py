@@ -196,3 +196,21 @@ def create_qa_chain(pipeline: HuggingFacePipeline, prompt_template: PromptTempla
     print("--> q&a chain")
     result = load_qa_chain(pipeline, chain_type="stuff", prompt=prompt_template)
     return result
+
+
+def clean_response(answer: str, raw: bool = False) -> str:
+    """
+    Cleans up the response.
+
+    :param answer: the response to clean up
+    :type answer: str
+    :param raw: if True then no cleaning is attempted
+    :type raw: bool
+    :return: the cleaned up response
+    :rtype: str
+    """
+    if raw:
+        return answer
+
+    answer = (answer.split("<|assistant|>")[-1]).strip()
+    return answer
