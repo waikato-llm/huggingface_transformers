@@ -132,10 +132,17 @@ docker run --rm --pull=always \
 ## Scripts
 
 * `kb_interactive` - for interactively querying the knowledge base of documents
-* `kb_redis` - for querying the knowledge base of documents via Redis
+* `kb_redis` - for querying the knowledge base of documents via Redis using JSON prompts
 
 When using Redis, make sure to include `--net=host` in your command-line when spinning up the docker image. 
 
+### JSON prompt
+
+```json
+{
+  "prompt": "the prompt text you want to send"
+}
+```
 
 ## Permissions
 
