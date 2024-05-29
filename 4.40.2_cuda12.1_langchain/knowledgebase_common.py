@@ -35,31 +35,46 @@ def load_embeddings(device: str) -> HuggingFaceEmbeddings:
     return result
 
 
-def load_tokenizer_and_model(model: str) -> Tuple:
+def load_tokenizer_and_model(model: str, attn_implementation: str = None) -> Tuple:
     """
     Loads the tokenizer/model and returns them as tuple.
 
     :param model: the name or path to the pretrained model to use
     :type model: str
+    :param attn_implementation: the attention implementation to use, e.g., flash_attention_2, ignored if None
+    :type attn_implementation: str
     :return: the tuple of tokenizer, model
     :rtype: tuple
     """
     print("--> tokenizer: %s" % model)
     tokenizer = AutoTokenizer.from_pretrained(model)
+
+    print("--> model: %s" % model)
     quant_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
         bnb_4bit_compute_dtype=torch.bfloat16,
         bnb_4bit_use_double_quant=False,
     )
-    print("--> model: %s" % model)
-    model = AutoModelForCausalLM.from_pretrained(
-        model,
-        device_map='auto',
-        torch_dtype="auto",
-        trust_remote_code=True,
-        quantization_config=quant_config,
-    )
+    if attn_implementation is None:
+        print("    attn implementation: default")
+        model = AutoModelForCausalLM.from_pretrained(
+            model,
+            device_map='auto',
+            torch_dtype="auto",
+            trust_remote_code=True,
+            quantization_config=quant_config,
+        )
+    else:
+        print("    attn implementation: %s" % attn_implementation)
+        model = AutoModelForCausalLM.from_pretrained(
+            model,
+            device_map='auto',
+            torch_dtype="auto",
+            trust_remote_code=True,
+            quantization_config=quant_config,
+            attn_implementation=attn_implementation,
+        )
     return tokenizer, model
 
 
