@@ -175,24 +175,34 @@ def create_retriever(db: Chroma, num_docs: int = 3) -> VectorStoreRetriever:
     return result
 
 
-def create_prompt_template(system_prompt: str = DEFAULT_PROMPT) -> PromptTemplate:
+def create_prompt_template(system_prompt: str = DEFAULT_PROMPT, plain_text_context: str = None) -> PromptTemplate:
     """
     Creates the prompt template to use.
 
     :param system_prompt: the system prompt to use
     :type system_prompt: str
+    :param plain_text_context: optional plain text file with additional context
+    :type plain_text_context: str
     :return: the generated template
     :rtype: PromptTemplate
     """
+    context_str = ""
+    if plain_text_context is not None:
+        if os.path.exists(plain_text_context):
+            with open(plain_text_context, "r") as fp:
+                lines = fp.readlines()
+            context_str = "\n" + "".join(lines).strip() + "\n"
+        else:
+            print("ERROR: plain context file not found: %s" % plain_text_context)
     print("--> creating prompt")
     qna_prompt_template = """<|system|>
     %s<|end|>
     <|user|>
-    Context:
+    Context:%s
     {context}
 
     Question: {question}<|end|>
-    <|assistant|>""" % system_prompt
+    <|assistant|>""" % (system_prompt, context_str)
     result = PromptTemplate(template=qna_prompt_template, input_variables=["context", "question"])
     return result
 

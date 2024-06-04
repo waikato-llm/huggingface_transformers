@@ -56,6 +56,7 @@ def main(args=None):
     parser.add_argument('--attn_implementation', type=str, required=False, default=None, help='The type of attention implementation to use, e.g., flash_attention_2')
     parser.add_argument('--device', type=str, required=False, default="cuda", help='The device to run the inference on, eg "cuda" or "cpu"')
     parser.add_argument('--prompt', type=str, required=False, default=DEFAULT_PROMPT, help='The prompt to use.')
+    parser.add_argument('--plain_text_context', type=str, required=False, default=None, help='The plain-text file with the additional context to use.')
     parser.add_argument('--input', help='The path to the PDF/text file(s) or dir(s) with PDF/text files to load into the vector store and use as context', required=True, default=None, nargs="+")
     parser.add_argument('--chunk_size', type=int, default=4000, help='The size of the chunks to create from the documents.')
     parser.add_argument('--chunk_overlap', type=int, default=20, help='The overlap between the chunks.')
@@ -68,7 +69,7 @@ def main(args=None):
     parsed = parser.parse_args(args=args)
 
     embeddings = load_embeddings(parsed.device)
-    prompt = create_prompt_template(parsed.prompt)
+    prompt = create_prompt_template(parsed.prompt, plain_text_context=parsed.plain_text_context)
     tokenizer, model = load_tokenizer_and_model(parsed.model, attn_implementation=parsed.attn_implementation)
     pipeline = create_pipeline(tokenizer, model, parsed.max_new_tokens)
     db = create_database(parsed.input, embeddings, chunk_size=parsed.chunk_size, chunk_overlap=parsed.chunk_overlap, persist_directory=parsed.db_dir)
