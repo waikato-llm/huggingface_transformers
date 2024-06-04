@@ -20,18 +20,23 @@ import torch
 DEFAULT_PROMPT = 'You have been provided with the context and a question, try to find out the answer to the question only using the context information. If the answer to the question is not found within the context, return "I dont know" as the response.'
 
 
-def load_embeddings(device: str) -> HuggingFaceEmbeddings:
+def load_embeddings(device: str, model_name: str = None) -> HuggingFaceEmbeddings:
     """
     Creates the embeddings for the device.
 
     :param device: the device to create the embeddings for, eg cuda or cpu
     :type device: str
+    :param model_name: the name of the embeddings model to use instead of the default one (sentence-transformers/all-mpnet-base-v2)
+    :type model_name: str
     :return: the embeddings
     :rtype: HuggingFaceEmbeddings
     """
     print("--> embeddings: %s" % device)
     model_kwargs = {'device': device}
-    result = HuggingFaceEmbeddings(model_kwargs=model_kwargs)
+    if model_name is None:
+        result = HuggingFaceEmbeddings(model_kwargs=model_kwargs)
+    else:
+        result = HuggingFaceEmbeddings(model_name=model_name, model_kwargs=model_kwargs)
     return result
 
 
