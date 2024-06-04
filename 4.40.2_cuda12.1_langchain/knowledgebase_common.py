@@ -165,7 +165,8 @@ def create_database(inputs: Union[str, List[str]], embeddings: HuggingFaceEmbedd
     return result
 
 
-def create_retriever(db: Chroma, num_docs: int = 3) -> VectorStoreRetriever:
+def create_retriever(db: Chroma, num_docs: int = 3, search_type: str = "similarity", fetch_k: int = 20,
+                     lambda_mult: float = 0.5, score_threshold: float = 0.8) -> VectorStoreRetriever:
     """
     Returns the retriever for the database.
 
@@ -173,10 +174,30 @@ def create_retriever(db: Chroma, num_docs: int = 3) -> VectorStoreRetriever:
     :type db: Chroma
     :param num_docs: the number of documents to return
     :type num_docs: int
+    :param search_type: the search type to use: similarity (default), mmr, similarity_score_threshold
+    :type search_type: str
+    :param fetch_k: amount of documents to pass to MMR algorithm
+    :type fetch_k: int
+    :param lambda_mult: diversity of results returned by MMR
+    :type lambda_mult: float
+    :param score_threshold: Minimum relevance threshold for similarity_score_threshold
+    :type score_threshold: float
     :return: the retriever
     :rtype: VectorStoreRetriever
     """
-    result = db.as_retriever(search_kwargs={"k": num_docs})
+    search_kwargs = {
+        "k": num_docs,
+    }
+    if search_type == "mmr":
+        search_kwargs["fetch_k"] = fetch_k
+        search_kwargs["lambda_mult"] = lambda_mult
+    elif search_type == "similarity_score_threshold":
+        search_kwargs["score_threshold"] = score_threshold
+
+    result = db.as_retriever(
+        search_type=search_type,
+        search_kwargs=search_kwargs,
+    )
     return result
 
 

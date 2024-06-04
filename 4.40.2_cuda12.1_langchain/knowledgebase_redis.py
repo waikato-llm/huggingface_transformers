@@ -63,7 +63,11 @@ def main(args=None):
     parser.add_argument('--chunk_overlap', type=int, default=20, help='The overlap between the chunks.')
     parser.add_argument('--db_dir', help='The directory to store the vector store in', required=False, default="db")
     parser.add_argument('--max_new_tokens', type=int, default=300, help='The maximum number of tokens to generate with the pipeline.')
+    parser.add_argument('--search_type', type=str, default="similarity", help='the search type to use: similarity (default), mmr, similarity_score_threshold.')
     parser.add_argument('--num_docs', type=int, default=3, help='The number of documents to retrieve from the vector store.')
+    parser.add_argument('--fetch_k', type=int, default=20, help='The amount of documents to pass to MMR algorithm.')
+    parser.add_argument('--lambda_mult', type=float, default=0.5, help='The diversity of results returned by MMR.')
+    parser.add_argument('--score_threshold', type=float, default=0.8, help='The minimum relevance threshold for "similarity_score_threshold".')
     parser.add_argument('--raw', action="store_true", help='Whether to return the raw responses rather than attempting to clean them up.')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
@@ -74,7 +78,9 @@ def main(args=None):
     tokenizer, model = load_tokenizer_and_model(parsed.model, attn_implementation=parsed.attn_implementation)
     pipeline = create_pipeline(tokenizer, model, parsed.max_new_tokens)
     db = create_database(parsed.input, embeddings, chunk_size=parsed.chunk_size, chunk_overlap=parsed.chunk_overlap, persist_directory=parsed.db_dir)
-    retriever = create_retriever(db, num_docs=parsed.num_docs)
+    retriever = create_retriever(db, num_docs=parsed.num_docs, search_type=parsed.search_type,
+                                 fetch_k=parsed.fetch_k, lambda_mult=parsed.lambda_mult,
+                                 score_threshold=parsed.score_threshold)
     chain = create_qa_chain(pipeline, prompt_template=prompt)
 
     config = Container()
