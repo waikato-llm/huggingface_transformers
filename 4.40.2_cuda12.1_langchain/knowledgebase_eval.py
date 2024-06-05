@@ -43,15 +43,15 @@ def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = F
     # iterate questions
     count = 0
     with open(questions, "r") as fp:
-        for line in fp.readline():
+        for line in fp.readlines():
             line = line.strip()
             if (len(line) == 0) or line.startswith("#"):
                 continue
             count += 1
-            print("--> question %d: %s" % (count, line))
+            print("\n--> question %d:\n%s" % (count, line))
             answer = ask(line)
             answer = clean_response(answer, raw=raw)
-            print("--> answer %d:\n", (count, answer))
+            print("\n--> answer %d:\n%s" % (count, answer))
             if result is not None:
                 result["qna"].append({
                     "question": line,
