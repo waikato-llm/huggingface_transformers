@@ -3,7 +3,9 @@ import traceback
 
 from datetime import datetime
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
-from knowledgebase_common import DEFAULT_PROMPT, load_embeddings, load_tokenizer_and_model, create_prompt_template, create_qa_chain, create_retriever, create_database, create_pipeline, clean_response
+from knowledgebase_common import (DEFAULT_PROMPT, PROMPT_PLACEHOLDERS, load_embeddings, load_tokenizer_and_model,
+                                  create_prompt_template, create_qa_chain, create_retriever, create_database,
+                                  create_pipeline, clean_response)
 
 
 def process_prompt(msg_cont):
@@ -56,6 +58,7 @@ def main(args=None):
     parser.add_argument('--attn_implementation', type=str, required=False, default=None, help='The type of attention implementation to use, e.g., flash_attention_2')
     parser.add_argument('--device', type=str, required=False, default="cuda", help='The device to run the inference on, eg "cuda" or "cpu"')
     parser.add_argument('--embeddings', type=str, required=False, default=None, help='The name of the embeddings model to use if not the default one')
+    parser.add_argument('--qna_prompt_template_file', type=str, required=False, default=None, help='The plain-text file with the prompt template for overriding the default one; supported placeholders: ' + ", ".join(PROMPT_PLACEHOLDERS))
     parser.add_argument('--prompt', type=str, required=False, default=DEFAULT_PROMPT, help='The prompt to use.')
     parser.add_argument('--plain_text_context', type=str, required=False, default=None, help='The plain-text file with the additional context to use.')
     parser.add_argument('--input', help='The path to the PDF/text file(s) or dir(s) with PDF/text files to load into the vector store and use as context', required=True, default=None, nargs="+")
@@ -74,7 +77,8 @@ def main(args=None):
     parsed = parser.parse_args(args=args)
 
     embeddings = load_embeddings(parsed.device, model_name=parsed.embeddings)
-    prompt = create_prompt_template(parsed.prompt, plain_text_context=parsed.plain_text_context)
+    prompt = create_prompt_template(parsed.prompt, plain_text_context=parsed.plain_text_context,
+                                    qna_prompt_template_file=parsed.qna_prompt_template_file)
     tokenizer, model = load_tokenizer_and_model(parsed.model, attn_implementation=parsed.attn_implementation)
     pipeline = create_pipeline(tokenizer, model, parsed.max_new_tokens)
     db = create_database(parsed.input, embeddings, chunk_size=parsed.chunk_size, chunk_overlap=parsed.chunk_overlap, persist_directory=parsed.db_dir)

@@ -16,8 +16,23 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 import torch
 
+DEFAULT_QNA_PROMPT_TEMPLATE = """<|system|>
+{SYSTEM_PROMPT}<|end|>
+<|user|>
+Context:{PLAIN_TEXT_CONTEXT}
+{context}
+
+Question: {question}<|end|>
+<|assistant|>"""
 
 DEFAULT_PROMPT = 'You have been provided with the context and a question, try to find out the answer to the question only using the context information. If the answer to the question is not found within the context, return "I dont know" as the response.'
+
+PH_SYSTEM_PROMPT = "{SYSTEM_PROMPT}"
+PH_PLAIN_TEXT_CONTEXT = "{PLAIN_TEXT_CONTEXT}"
+PROMPT_PLACEHOLDERS = [
+    PH_SYSTEM_PROMPT,
+    PH_PLAIN_TEXT_CONTEXT,
+]
 
 
 def load_embeddings(device: str, model_name: str = None) -> HuggingFaceEmbeddings:
@@ -201,7 +216,8 @@ def create_retriever(db: Chroma, num_docs: int = 3, search_type: str = "similari
     return result
 
 
-def create_prompt_template(system_prompt: str = DEFAULT_PROMPT, plain_text_context: str = None) -> PromptTemplate:
+def create_prompt_template(system_prompt: str = DEFAULT_PROMPT, plain_text_context: str = None,
+                           qna_prompt_template_file: str = None) -> PromptTemplate:
     """
     Creates the prompt template to use.
 
@@ -209,26 +225,31 @@ def create_prompt_template(system_prompt: str = DEFAULT_PROMPT, plain_text_conte
     :type system_prompt: str
     :param plain_text_context: optional plain text file with additional context
     :type plain_text_context: str
+    :param qna_prompt_template_file: the file containing the prompt template to use, must contain placeholders PH_SYSTEM_PROMPT and PH_PLAIN_TEXT_CONTEXT
+    :type qna_prompt_template_file: str
     :return: the generated template
     :rtype: PromptTemplate
     """
-    context_str = ""
+    plain_text_context_str = ""
     if plain_text_context is not None:
         if os.path.exists(plain_text_context):
             with open(plain_text_context, "r") as fp:
                 lines = fp.readlines()
-            context_str = "\n" + "".join(lines).strip() + "\n"
+            plain_text_context_str = "\n" + "".join(lines).strip() + "\n"
         else:
             print("ERROR: plain context file not found: %s" % plain_text_context)
-    print("--> creating prompt")
-    qna_prompt_template = """<|system|>
-    %s<|end|>
-    <|user|>
-    Context:%s
-    {context}
-
-    Question: {question}<|end|>
-    <|assistant|>""" % (system_prompt, context_str)
+    if qna_prompt_template_file is None:
+        qna_prompt_template = DEFAULT_QNA_PROMPT_TEMPLATE
+    else:
+        print("--> loading prompt template from: %s" % qna_prompt_template_file)
+        with open(qna_prompt_template_file, "r") as fp:
+            lines = fp.readlines()
+        qna_prompt_template = "".join(lines)
+    print("--> creating prompt template")
+    qna_prompt_template = qna_prompt_template.replace(PH_SYSTEM_PROMPT, system_prompt)
+    qna_prompt_template = qna_prompt_template.replace(PH_PLAIN_TEXT_CONTEXT, plain_text_context_str)
+    print("--> prompt template")
+    print(qna_prompt_template)
     result = PromptTemplate(template=qna_prompt_template, input_variables=["context", "question"])
     return result
 
