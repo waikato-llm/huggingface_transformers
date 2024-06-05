@@ -50,6 +50,7 @@ def main(args=None):
     parser.add_argument('--input', help='The path to the PDF/text file(s) or dir(s) with PDF/text files to load into the vector store and use as context', required=True, default=None, nargs="+")
     parser.add_argument('--chunk_size', type=int, default=4000, help='The size of the chunks to create from the documents.')
     parser.add_argument('--chunk_overlap', type=int, default=20, help='The overlap between the chunks.')
+    parser.add_argument('--db_init', action="store_true", help='Whether to remove any existing vector store first.')
     parser.add_argument('--db_dir', help='The directory to store the vector store in', required=False, default="db")
     parser.add_argument('--max_new_tokens', type=int, default=300, help='The maximum number of tokens to generate with the pipeline.')
     parser.add_argument('--search_type', type=str, default="similarity", help='the search type to use: similarity (default), mmr, similarity_score_threshold.')
@@ -65,7 +66,8 @@ def main(args=None):
                                     qna_prompt_template_file=parsed.qna_prompt_template_file)
     tokenizer, model = load_tokenizer_and_model(parsed.model, attn_implementation=parsed.attn_implementation)
     pipeline = create_pipeline(tokenizer, model, parsed.max_new_tokens)
-    db = create_database(parsed.input, embeddings, chunk_size=parsed.chunk_size, chunk_overlap=parsed.chunk_overlap, persist_directory=parsed.db_dir)
+    db = create_database(parsed.input, embeddings, chunk_size=parsed.chunk_size, chunk_overlap=parsed.chunk_overlap,
+                         persist_directory=parsed.db_dir, initialize=parsed.db_init)
     retriever = create_retriever(db, num_docs=parsed.num_docs, search_type=parsed.search_type,
                                  fetch_k=parsed.fetch_k, lambda_mult=parsed.lambda_mult,
                                  score_threshold=parsed.score_threshold)

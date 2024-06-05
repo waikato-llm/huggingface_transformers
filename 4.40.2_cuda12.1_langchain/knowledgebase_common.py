@@ -2,6 +2,7 @@
 # https://www.pragnakalp.com/leverage-phi-3-exploring-rag-based-qna-with-microsofts-phi-3/
 
 import os
+import shutil
 from typing import Tuple, List, Union
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
@@ -116,7 +117,7 @@ def create_pipeline(tokenizer, model, max_new_tokens: int) -> HuggingFacePipelin
 
 
 def create_database(inputs: Union[str, List[str]], embeddings: HuggingFaceEmbeddings, chunk_size: int = 4000,
-                    chunk_overlap: int = 20, persist_directory: str = "db") -> Chroma:
+                    chunk_overlap: int = 20, persist_directory: str = "db", initialize: bool = False) -> Chroma:
     """
     Loads the document(s) (pdf or txt) and turns them into a Chroma database to be stored in
     the "persist_directory" directory. The database instance gets returned.
@@ -131,9 +132,16 @@ def create_database(inputs: Union[str, List[str]], embeddings: HuggingFaceEmbedd
     :type chunk_overlap: int
     :param persist_directory: the directory to store the Chroma database in
     :type persist_directory: str
+    :param initialize: whether to remove any existing Chroma database first
+    :type initialize: bool
     :return: the Chroma database instance
     :rtype: Chroma
     """
+    # remove existing db?
+    if initialize and os.path.exists(persist_directory):
+        print("--> removing old db: %s" % persist_directory)
+        shutil.rmtree(persist_directory, ignore_errors=True)
+
     # locate files
     if isinstance(inputs, str):
         inputs = [inputs]
