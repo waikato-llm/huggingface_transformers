@@ -24,10 +24,6 @@ def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = F
     """
     print("--> asking questions from: %s" % questions)
 
-    def ask(question):
-        context = retriever.invoke(question)
-        return (chain({"input_documents": context, "question": question}, return_only_outputs=True))['output_text']
-
     # generate output?
     result = None
     if output is not None:
@@ -40,8 +36,24 @@ def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = F
                 result["params"][att] = getattr(params, att)
         result["qna"] = list()
 
-    # iterate questions
     count = 0
+
+    def ask(question):
+        context = retriever.invoke(question)
+        answer = (chain({"input_documents": context, "question": question}, return_only_outputs=True))['output_text']
+        if result is not None:
+            result["qna"].append({
+                "index": count,
+                "question": line,
+                "documents": [doc.page_content for doc in context],
+                "answer": {
+                    "raw": answer,
+                    "clean": clean_response(answer, raw=False),
+                },
+            })
+        return answer
+
+    # iterate questions
     with open(questions, "r") as fp:
         for line in fp.readlines():
             line = line.strip()
@@ -52,17 +64,12 @@ def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = F
             answer = ask(line)
             answer = clean_response(answer, raw=raw)
             print("\n--> answer %d:\n%s" % (count, answer))
-            if result is not None:
-                result["qna"].append({
-                    "question": line,
-                    "answer": answer
-                })
 
     # write output
     if result is not None:
         print("--> writing results to: %s" % output)
         with open(output, "w") as fp:
-            json.dump(result, fp, indent=2)
+            json.dump(result, fp, indent=2, ensure_ascii=False)
 
 
 def main(args=None):
@@ -111,7 +118,7 @@ def main(args=None):
                                  fetch_k=parsed.fetch_k, lambda_mult=parsed.lambda_mult,
                                  score_threshold=parsed.score_threshold)
     chain = create_qa_chain(pipeline, prompt_template=prompt)
-    evaluate(chain, retriever, parsed.questions, raw=parsed.raw, params=parsed)
+    evaluate(chain, retriever, parsed.questions, raw=parsed.raw, params=parsed, output=parsed.output)
 
 
 def sys_main() -> int:
