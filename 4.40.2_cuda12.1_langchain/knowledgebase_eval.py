@@ -62,7 +62,7 @@ def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = F
     if result is not None:
         print("--> writing results to: %s" % output)
         with open(output, "w") as fp:
-            json.dump(result, fp)
+            json.dump(result, fp, indent=2)
 
 
 def main(args=None):
