@@ -131,6 +131,7 @@ docker run --rm --pull=always \
 
 ## Scripts
 
+* `kb_eval` - prompts model with questions stored in the text file
 * `kb_interactive` - for interactively querying the knowledge base of documents
 * `kb_redis` - for querying the knowledge base of documents via Redis using JSON prompts
 
