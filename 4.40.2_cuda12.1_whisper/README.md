@@ -14,10 +14,10 @@ Uses PyTorch 2.3.0, CUDA 12.1.
   docker login -u public -p public public.aml-repo.cms.waikato.ac.nz:443 
   ```
   
-* Create the following directory:
+* Create the following directories:
 
   ```bash
-  mkdir cache
+  mkdir cache triton
   ```
 
 * Launch docker container
@@ -29,15 +29,16 @@ Uses PyTorch 2.3.0, CUDA 12.1.
     --shm-size 8G \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
+    -v `pwd`/triton:/.triton \
     -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.40.2_cuda12.1_whisper
   ```
 
 ### Docker hub
   
-* Create the following directory:
+* Create the following directories:
 
   ```bash
-  mkdir cache
+  mkdir cache triton
   ```
 
 * Launch docker container
@@ -49,6 +50,7 @@ Uses PyTorch 2.3.0, CUDA 12.1.
     --shm-size 8G \
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
+    -v `pwd`/triton:/.triton \
     -it waikatodatamining/pytorch-huggingface-transformers:4.40.2_cuda12.1_whisper
   ```
 
@@ -59,14 +61,25 @@ Uses PyTorch 2.3.0, CUDA 12.1.
   ```bash
   docker build -t hf .
   ```
-  
+    
+* Create the following directories:
+
+  ```bash
+  mkdir cache triton
+  ```
+
 * Run the container
 
   ```bash
-  docker run --rm --gpus=all --shm-size 8G -v /local/dir:/container/dir -it hf
+  docker run --rm \
+    -u $(id -u):$(id -g) -e USER=$USER \
+    --gpus=all \
+    --shm-size 8G \
+    -v `pwd`:/workspace \
+    -v `pwd`/cache:/.cache \
+    -v `pwd`/triton:/.triton \
+    -it hf
   ```
-  `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
-
 
 ## Publish images
 
