@@ -7,6 +7,7 @@ Available versions:
 * 4.40.2
   * [CUDA 12.1](4.40.2_cuda12.1)
   * [CUDA 12.1 langchain](4.40.2_cuda12.1_langchain)
+  * [CUDA 12.1 whisper](4.40.2_cuda12.1_whisper)
 
 * 4.40.0
   * [CUDA 11.7](4.40.0_cuda11.7)
