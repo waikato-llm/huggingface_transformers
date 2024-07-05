@@ -47,7 +47,7 @@ def load_embeddings(device: str, model_name: str = None) -> HuggingFaceEmbedding
     :return: the embeddings
     :rtype: HuggingFaceEmbeddings
     """
-    print("--> embeddings: %s" % device)
+    print("--> embeddings: %s/%s" % ("-default-" if (model_name is None) else model_name, device))
     model_kwargs = {'device': device}
     if model_name is None:
         result = HuggingFaceEmbeddings(model_kwargs=model_kwargs)
