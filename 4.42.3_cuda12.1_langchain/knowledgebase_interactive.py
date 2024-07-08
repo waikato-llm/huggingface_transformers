@@ -6,7 +6,7 @@ from knowledgebase_common import (DEFAULT_PROMPT, PROMPT_PLACEHOLDERS, load_embe
                                   create_pipeline, clean_response)
 
 
-def query(chain, retriever, raw: bool = False):
+def query(chain, retriever, raw: bool = False, response_start: str = "<|assistant|>", response_end: str = None):
     """
     Lets the user query the document store (used as context).
 
@@ -14,6 +14,10 @@ def query(chain, retriever, raw: bool = False):
     :param retriever: the document retriever for the vector store
     :param raw: whether to return the raw answers
     :type raw: bool
+    :param response_start: the string/tag that identifies the start of the answer
+    :type response_start: str
+    :param response_end: the string/tag that identifies the end of the answer, ignored if None/empty
+    :type response_end: str
     """
     def ask(question):
         context = retriever.invoke(question)
@@ -24,7 +28,7 @@ def query(chain, retriever, raw: bool = False):
         if (user_question is None) or (user_question == ""):
             break
         answer = ask(user_question)
-        answer = clean_response(answer, raw=raw)
+        answer = clean_response(answer, raw=raw, response_start=response_start, response_end=response_end)
         print("Answer:\n", answer)
 
 
@@ -59,6 +63,8 @@ def main(args=None):
     parser.add_argument('--lambda_mult', type=float, default=0.5, help='The diversity of results returned by MMR.')
     parser.add_argument('--score_threshold', type=float, default=0.8, help='The minimum relevance threshold for "similarity_score_threshold".')
     parser.add_argument('--raw', action="store_true", help='Whether to return the raw responses rather than attempting to clean them up.')
+    parser.add_argument('--response_start', type=str, required=False, default="<|assistant|>", help='The string/tag that identifies the start of the answer.')
+    parser.add_argument('--response_end', type=str, required=False, default=None, help='The string/tag that identifies the end of the answer; ignored if not provided.')
     parsed = parser.parse_args(args=args)
 
     embeddings = load_embeddings(parsed.device, model_name=parsed.embeddings)
@@ -72,7 +78,7 @@ def main(args=None):
                                  fetch_k=parsed.fetch_k, lambda_mult=parsed.lambda_mult,
                                  score_threshold=parsed.score_threshold)
     chain = create_qa_chain(pipeline, prompt_template=prompt)
-    query(chain, retriever, raw=parsed.raw)
+    query(chain, retriever, raw=parsed.raw, response_start=parsed.response_start, response_end=parsed.response_end)
 
 
 def sys_main() -> int:

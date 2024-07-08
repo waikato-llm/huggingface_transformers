@@ -30,7 +30,7 @@ def process_prompt(msg_cont):
 
         text = d["prompt"] if ("prompt" in d) else ""
         answer = ask(text)
-        answer = clean_response(answer, raw=config.raw)
+        answer = clean_response(answer, raw=config.raw, response_start=config.response_start, response_end=config.response_end)
 
         msg_cont.params.redis.publish(msg_cont.params.channel_out, answer)
         if config.verbose:
@@ -73,6 +73,8 @@ def main(args=None):
     parser.add_argument('--lambda_mult', type=float, default=0.5, help='The diversity of results returned by MMR.')
     parser.add_argument('--score_threshold', type=float, default=0.8, help='The minimum relevance threshold for "similarity_score_threshold".')
     parser.add_argument('--raw', action="store_true", help='Whether to return the raw responses rather than attempting to clean them up.')
+    parser.add_argument('--response_start', type=str, required=False, default="<|assistant|>", help='The string/tag that identifies the start of the answer.')
+    parser.add_argument('--response_end', type=str, required=False, default=None, help='The string/tag that identifies the end of the answer; ignored if not provided.')
     parser.add_argument('--verbose', required=False, action='store_true', help='whether to be more verbose with the output')
 
     parsed = parser.parse_args(args=args)
@@ -93,6 +95,8 @@ def main(args=None):
     config.chain = chain
     config.retriever = retriever
     config.raw = parsed.raw
+    config.response_start = parsed.response_start
+    config.response_end = parsed.response_end
     config.verbose = parsed.verbose
 
     params = configure_redis(parsed, config=config)

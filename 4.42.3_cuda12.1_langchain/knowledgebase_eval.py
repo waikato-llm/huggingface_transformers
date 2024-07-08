@@ -7,7 +7,8 @@ from knowledgebase_common import (DEFAULT_PROMPT, PROMPT_PLACEHOLDERS, load_embe
                                   create_pipeline, clean_response)
 
 
-def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = False, params: argparse.Namespace = None):
+def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = False, params: argparse.Namespace = None,
+             response_start: str = "<|assistant|>", response_end: str = None):
     """
     Lets the user query the document store (used as context).
 
@@ -21,6 +22,10 @@ def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = F
     :type raw: bool
     :param params: the parameters that were used, can be None
     :type params: argparse.Namespace
+    :param response_start: the string/tag that identifies the start of the answer
+    :type response_start: str
+    :param response_end: the string/tag that identifies the end of the answer, ignored if None/empty
+    :type response_end: str
     """
     print("--> asking questions from: %s" % questions)
 
@@ -48,7 +53,7 @@ def evaluate(chain, retriever, questions: str, output: str = None, raw: bool = F
                 "documents": [doc.page_content for doc in context],
                 "answer": {
                     "raw": answer,
-                    "clean": clean_response(answer, raw=False),
+                    "clean": clean_response(answer, raw=False, response_start=response_start, response_end=response_end),
                 },
             })
         return answer
@@ -104,6 +109,8 @@ def main(args=None):
     parser.add_argument('--score_threshold', type=float, default=0.8, help='The minimum relevance threshold for "similarity_score_threshold".')
     parser.add_argument('--raw', action="store_true", help='Whether to return the raw responses rather than attempting to clean them up.')
     parser.add_argument('--questions', type=str, required=True, default=None, help='The plain-text file with the questions to prompt the model with; one question per line; empty lines and lines starting with # get ignored.')
+    parser.add_argument('--response_start', type=str, required=False, default="<|assistant|>", help='The string/tag that identifies the start of the answer.')
+    parser.add_argument('--response_end', type=str, required=False, default=None, help='The string/tag that identifies the end of the answer; ignored if not provided.')
     parser.add_argument('--output', type=str, required=False, default=None, help='The JSON file to store the parameters and results in; outputs results on stdout if not provided.')
     parsed = parser.parse_args(args=args)
 
@@ -118,7 +125,8 @@ def main(args=None):
                                  fetch_k=parsed.fetch_k, lambda_mult=parsed.lambda_mult,
                                  score_threshold=parsed.score_threshold)
     chain = create_qa_chain(pipeline, prompt_template=prompt)
-    evaluate(chain, retriever, parsed.questions, raw=parsed.raw, params=parsed, output=parsed.output)
+    evaluate(chain, retriever, parsed.questions, raw=parsed.raw, params=parsed, output=parsed.output,
+             response_start=parsed.response_start, response_end=parsed.response_end)
 
 
 def sys_main() -> int:

@@ -278,7 +278,8 @@ def create_qa_chain(pipeline: HuggingFacePipeline, prompt_template: PromptTempla
     return result
 
 
-def clean_response(answer: str, raw: bool = False) -> str:
+def clean_response(answer: str, raw: bool = False,
+                   response_start: str = "<|assistant|>", response_end: str = None) -> str:
     """
     Cleans up the response.
 
@@ -286,11 +287,17 @@ def clean_response(answer: str, raw: bool = False) -> str:
     :type answer: str
     :param raw: if True then no cleaning is attempted
     :type raw: bool
+    :param response_start: the string/tag that identifies the start of the answer
+    :type response_start: str
+    :param response_end: the string/tag that identifies the end of the answer, ignored if None/empty
+    :type response_end: str
     :return: the cleaned up response
     :rtype: str
     """
     if raw:
         return answer
 
-    answer = (answer.split("<|assistant|>")[-1]).strip()
+    answer = (answer.split(response_start)[-1]).strip()
+    if (response_end is not None) and (len(response_end) > 0):
+        answer = (answer.split(response_end)[0]).strip()
     return answer
