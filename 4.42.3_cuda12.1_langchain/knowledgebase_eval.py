@@ -102,6 +102,8 @@ def main(args=None):
     parser.add_argument('--db_init', action="store_true", help='Whether to remove any existing vector store first.')
     parser.add_argument('--db_dir', help='The directory to store the vector store in', required=False, default="db")
     parser.add_argument('--max_new_tokens', type=int, default=300, help='The maximum number of tokens to generate with the pipeline.')
+    parser.add_argument('--do_sample', action="store_true", help='Whether to perform sampling.')
+    parser.add_argument('--temperature', type=float, default=0.7, help='For adjusting the probability distribution.')
     parser.add_argument('--search_type', type=str, default="similarity", help='the search type to use: similarity (default), mmr, similarity_score_threshold.')
     parser.add_argument('--num_docs', type=int, default=3, help='The number of documents to retrieve from the vector store.')
     parser.add_argument('--fetch_k', type=int, default=20, help='The amount of documents to pass to MMR algorithm.')
@@ -118,7 +120,7 @@ def main(args=None):
     prompt = create_prompt_template(parsed.prompt, plain_text_context=parsed.plain_text_context,
                                     qna_prompt_template_file=parsed.qna_prompt_template_file)
     tokenizer, model = load_tokenizer_and_model(parsed.model, attn_implementation=parsed.attn_implementation)
-    pipeline = create_pipeline(tokenizer, model, parsed.max_new_tokens)
+    pipeline = create_pipeline(tokenizer, model, max_new_tokens=parsed.max_new_tokens, do_sample=parsed.do_sample, temperature=parsed.temperature)
     db = create_database(parsed.input, embeddings, chunk_size=parsed.chunk_size, chunk_overlap=parsed.chunk_overlap,
                          persist_directory=parsed.db_dir, initialize=parsed.db_init)
     retriever = create_retriever(db, num_docs=parsed.num_docs, search_type=parsed.search_type,

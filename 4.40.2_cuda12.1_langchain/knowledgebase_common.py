@@ -99,7 +99,7 @@ def load_tokenizer_and_model(model: str, attn_implementation: str = None) -> Tup
     return tokenizer, model
 
 
-def create_pipeline(tokenizer, model, max_new_tokens: int) -> HuggingFacePipeline:
+def create_pipeline(tokenizer, model, max_new_tokens: int = 300, do_sample: bool = False, temperature: float = 0.7) -> HuggingFacePipeline:
     """
     Creates the huggingface pipeline from model/tokenizer.
 
@@ -107,11 +107,16 @@ def create_pipeline(tokenizer, model, max_new_tokens: int) -> HuggingFacePipelin
     :param model: the huggingface model to use
     :param max_new_tokens: the maximum number of new tokens to generate
     :type max_new_tokens: int
+    :param do_sample: whether to perform sampling
+    :type do_sample: bool
+    :param temperature: the temperature to use (0-1]
+    :type temperature: float
     :return: the generated pipeline
     :rtype: HuggingFacePipeline
     """
     print("--> pipeline: max_new_tokens=%d" % max_new_tokens)
-    pipe = pipeline("text-generation", tokenizer=tokenizer, model=model, max_new_tokens=max_new_tokens)
+    pipe = pipeline("text-generation", tokenizer=tokenizer, model=model,
+                    max_new_tokens=max_new_tokens, do_sample=do_sample, temperature=temperature)
     result = HuggingFacePipeline(pipeline=pipe)
     return result
 
