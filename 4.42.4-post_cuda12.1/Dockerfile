@@ -10,14 +10,14 @@ ARG distro=ubuntu2204
 ARG arch=x86_64
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/3bf863cc.pub
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-glx python3-dev python3-pip git wget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # transformers 2024/07/23, 96a074fa7e2c04b904f72d9e827398d4c5f90f25
-RUN pip install --no-cache-dir transformers==git+https://github.com/huggingface/transformers.git@96a074fa7e2c04b904f72d9e827398d4c5f90f25 \
+RUN pip install --no-cache-dir "transformers==git+https://github.com/huggingface/transformers.git@96a074fa7e2c04b904f72d9e827398d4c5f90f25"
 RUN pip install --no-cache-dir \
       timm==0.9.16 \
       xformers==0.0.26.post1 \
@@ -35,7 +35,6 @@ RUN pip install --no-cache-dir \
 
 # original path, which doesn't contain any CUDA libraries:
 # LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64
-ENV LD_LIBRARY_PATH /usr/local/cuda-11/lib64
+ENV LD_LIBRARY_PATH=/usr/local/cuda-11/lib64
 
 COPY bash.bashrc /etc/bash.bashrc
-
