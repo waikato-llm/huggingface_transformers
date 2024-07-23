@@ -7,7 +7,7 @@ Available versions:
 * 4.43.0 ([CUDA 12.1](4.43.0_cuda12.1), [CUDA 12.1 langchain](4.43.0_cuda12.1_langchain))
 * 4.42.4-post ([CUDA 12.1](4.42.4-post_cuda12.1), [CUDA 12.1 langchain](4.42.4-post_cuda12.1_langchain))
 * 4.42.3 ([CUDA 12.1](4.42.3_cuda12.1), [CUDA 12.1 langchain](4.42.3_cuda12.1_langchain))
-* 4.40.2 ([CUDA 12.1](4.40.2_cuda12.1), [CUDA 12.1 langchain](4.40.2_cuda12.1_langchain), [CUDA 12.1 whisper](4.40.2_cuda12.1_whisper))
+* 4.40.2 ([CUDA 12.1](4.40.2_cuda12.1), [CUDA 12.1 langchain](4.40.2_cuda12.1_langchain))
 * 4.40.0 ([CUDA 11.7](4.40.0_cuda11.7), [CUDA 11.7 langchain](4.40.0_cuda11.7_langchain))
 * 4.36.0 ([CUDA 11.7](4.36.0_cuda11.7), [CUDA 11.7 Mistral](4.36.0_cuda11.7_mistral), [CUDA 11.7 Text classification](4.36.0_cuda11.7_classification))
 * 4.35.0 ([CUDA 11.7](4.35.0_cuda11.7), [CUDA 11.7 Mistral](4.35.0_cuda11.7_mistral))
