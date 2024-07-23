@@ -1,4 +1,4 @@
-FROM waikatodatamining/pytorch-huggingface-transformers:4.43.0_cuda12.1
+FROM waikatodatamining/pytorch-huggingface-transformers:4.43.1_cuda12.1
 
 # https://www.pragnakalp.com/leverage-phi-3-exploring-rag-based-qna-with-microsofts-phi-3/
 RUN pip install --no-cache-dir \

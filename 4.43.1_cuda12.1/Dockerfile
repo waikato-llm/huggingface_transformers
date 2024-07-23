@@ -16,7 +16,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir transformers==4.43.0
+RUN pip install --no-cache-dir transformers==4.43.1
 RUN pip install --no-cache-dir \
       timm==0.9.16 \
       xformers==0.0.26.post1 \

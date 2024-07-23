@@ -4,7 +4,7 @@ Docker images for [Huggingface transformers](https://github.com/huggingface/tran
 
 Available versions:
 
-* 4.43.0 ([CUDA 12.1](4.43.0_cuda12.1), [CUDA 12.1 langchain](4.43.0_cuda12.1_langchain))
+* 4.43.1 ([CUDA 12.1](4.43.1_cuda12.1), [CUDA 12.1 langchain](4.43.1_cuda12.1_langchain))
 * 4.42.4-post ([CUDA 12.1](4.42.4-post_cuda12.1), [CUDA 12.1 langchain](4.42.4-post_cuda12.1_langchain))
 * 4.42.3 ([CUDA 12.1](4.42.3_cuda12.1), [CUDA 12.1 langchain](4.42.3_cuda12.1_langchain))
 * 4.40.2 ([CUDA 12.1](4.40.2_cuda12.1), [CUDA 12.1 langchain](4.40.2_cuda12.1_langchain))

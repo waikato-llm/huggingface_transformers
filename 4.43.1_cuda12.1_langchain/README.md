@@ -1,6 +1,6 @@
 # Huggingface transformers
 
-Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.43.0 with langchain support.
+Docker image for [Huggingface transformers](https://github.com/huggingface/transformers) 4.43.1 with langchain support.
 
 Uses PyTorch 2.3.0, CUDA 12.1.
 
@@ -30,7 +30,7 @@ Uses PyTorch 2.3.0, CUDA 12.1.
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -v `pwd`/triton:/.triton \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain
   ```
 
 ### Docker hub
@@ -51,12 +51,12 @@ Uses PyTorch 2.3.0, CUDA 12.1.
     -v `pwd`:/workspace \
     -v `pwd`/cache:/.cache \
     -v `pwd`/triton:/.triton \
-    -it waikatodatamining/pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain
+    -it waikatodatamining/pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/huggingface-transformers/4.43.0_cuda12.1_langchain)
+* Build the image from Docker file (from within /path_to/huggingface-transformers/4.43.1_cuda12.1_langchain)
 
   ```bash
   docker build -t hf .
@@ -75,7 +75,7 @@ Uses PyTorch 2.3.0, CUDA 12.1.
 ### Build
 
 ```bash
-docker build -t pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain .
+docker build -t pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain .
 ```
 
 ### Inhouse registry  
@@ -84,14 +84,14 @@ docker build -t pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain .
 
   ```bash
   docker tag \
-    pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain
+    pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -105,14 +105,14 @@ docker build -t pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain .
 
   ```bash
   docker tag \
-    pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain \
-    waikatodatamining/pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain
+    pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain \
+    waikatodatamining/pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain
+  docker push waikatodatamining/pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -125,7 +125,7 @@ docker build -t pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain .
 
 ```bash
 docker run --rm --pull=always \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.0_cuda12.1_langchain \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/pytorch-huggingface-transformers:4.43.1_cuda12.1_langchain \
   pip freeze > requirements.txt
 ```
 
