@@ -4,39 +4,14 @@ Docker images for [Huggingface transformers](https://github.com/huggingface/tran
 
 Available versions:
 
-* 4.42.3
-  * [CUDA 12.1](4.42.3_cuda12.1)
-  * [CUDA 12.1 langchain](4.42.3_cuda12.1_langchain)
-
-* 4.40.2
-  * [CUDA 12.1](4.40.2_cuda12.1)
-  * [CUDA 12.1 langchain](4.40.2_cuda12.1_langchain)
-  * [CUDA 12.1 whisper](4.40.2_cuda12.1_whisper)
-
-* 4.40.0
-  * [CUDA 11.7](4.40.0_cuda11.7)
-  * [CUDA 11.7 langchain](4.40.0_cuda11.7_langchain)
-
-* 4.36.0
-  * [CUDA 11.7](4.36.0_cuda11.7)
-  * [CUDA 11.7 Mistral](4.36.0_cuda11.7_mistral)
-  * [CUDA 11.7 Text classification](4.36.0_cuda11.7_classification)
-
-* 4.35.0
-  * [CUDA 11.7](4.35.0_cuda11.7)
-  * [CUDA 11.7 Mistral](4.35.0_cuda11.7_mistral)
-
-* 4.31.0
-  * [CUDA 11.7](4.31.0_cuda11.7)
-  * [CUDA 11.7 with falcontune](4.31.0_cuda11.7_falcontune_20230618)
-  * [CUDA 11.7 Llama2](4.31.0_cuda11.7_llama2) ([8bit](4.31.0_cuda11.7_llama2_8bit))
-  * [CUDA 11.7 QLoRA](4.31.0_cuda11.7_qlora_20230724)
-  * [CUDA 11.7 RemBERT](4.31.0_cuda11.7_rembert)
-  * [CUDA 11.7 translate](4.31.0_cuda11.7_translate)
-
-* 4.7.0
-  * [CUDA 11.1](4.7.0_cuda11.1)
-  * [CUDA 11.1 with finetune-gpt2xl](4.7.0_cuda11.1_finetune-gpt2xl_20220924)
+* 4.42.4-post ([CUDA 12.1](4.42.4-post_cuda12.1), [CUDA 12.1 langchain](4.42.4-post_cuda12.1_langchain))
+* 4.42.3 ([CUDA 12.1](4.42.3_cuda12.1), [CUDA 12.1 langchain](4.42.3_cuda12.1_langchain))
+* 4.40.2 ([CUDA 12.1](4.40.2_cuda12.1), [CUDA 12.1 langchain](4.40.2_cuda12.1_langchain), [CUDA 12.1 whisper](4.40.2_cuda12.1_whisper))
+* 4.40.0 ([CUDA 11.7](4.40.0_cuda11.7), [CUDA 11.7 langchain](4.40.0_cuda11.7_langchain))
+* 4.36.0 ([CUDA 11.7](4.36.0_cuda11.7), [CUDA 11.7 Mistral](4.36.0_cuda11.7_mistral), [CUDA 11.7 Text classification](4.36.0_cuda11.7_classification))
+* 4.35.0 ([CUDA 11.7](4.35.0_cuda11.7), [CUDA 11.7 Mistral](4.35.0_cuda11.7_mistral))
+* 4.31.0 ([CUDA 11.7](4.31.0_cuda11.7), [CUDA 11.7 with falcontune](4.31.0_cuda11.7_falcontune_20230618), [CUDA 11.7 Llama2](4.31.0_cuda11.7_llama2) ([8bit](4.31.0_cuda11.7_llama2_8bit)), [CUDA 11.7 QLoRA](4.31.0_cuda11.7_qlora_20230724), [CUDA 11.7 RemBERT](4.31.0_cuda11.7_rembert), [CUDA 11.7 translate](4.31.0_cuda11.7_translate))
+* 4.7.0 ([CUDA 11.1](4.7.0_cuda11.1), [CUDA 11.1 with finetune-gpt2xl](4.7.0_cuda11.1_finetune-gpt2xl_20220924))
 
 
 ## Restricted access
