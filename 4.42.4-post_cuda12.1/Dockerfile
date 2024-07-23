@@ -17,7 +17,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # transformers 2024/07/23, 96a074fa7e2c04b904f72d9e827398d4c5f90f25
-RUN pip install --no-cache-dir "transformers==git+https://github.com/huggingface/transformers.git@96a074fa7e2c04b904f72d9e827398d4c5f90f25"
+RUN pip install --no-cache-dir "git+https://github.com/huggingface/transformers.git@96a074fa7e2c04b904f72d9e827398d4c5f90f25"
 RUN pip install --no-cache-dir \
       timm==0.9.16 \
       xformers==0.0.26.post1 \
