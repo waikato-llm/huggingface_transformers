@@ -138,7 +138,7 @@ torchelastic==0.2.2
 torchvision==0.18.0
 tqdm @ file:///croot/tqdm_1679561862951/work
 traitlets @ file:///croot/traitlets_1671143879854/work
-transformers==4.43.0
+transformers==4.43.1
 triton==2.3.0
 trl==0.8.6
 truststore @ file:///croot/truststore_1695244293384/work
