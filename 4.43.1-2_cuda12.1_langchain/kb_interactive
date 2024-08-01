@@ -1,0 +1,3 @@
+#!/bin/bash
+
+python3 /opt/knowledgebase/knowledgebase_interactive.py "$@"
