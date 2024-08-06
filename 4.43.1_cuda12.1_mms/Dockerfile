@@ -5,3 +5,5 @@ RUN pip install --no-cache-dir redis && \
     pip install --no-cache-dir scipy==1.14.0
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY mms_asr_poll /usr/bin/
+COPY *.py /opt/mms/

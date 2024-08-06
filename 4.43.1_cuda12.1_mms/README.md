@@ -131,7 +131,7 @@ docker run --rm --pull=always \
 
 ## Scripts
 
-* `TODO` - TODO
+* `mms_asr_poll` - for transcribing audio files
 
 When using Redis, make sure to include `--net=host` in your command-line when spinning up the docker image. 
 
