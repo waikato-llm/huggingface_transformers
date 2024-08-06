@@ -1,0 +1,10 @@
+test/
+cache/
+data/
+output/
+triton/
+.idea/
+*~
+*.swp
+*.iml
+test*.py
