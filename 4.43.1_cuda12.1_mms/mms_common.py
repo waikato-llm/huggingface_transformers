@@ -79,7 +79,7 @@ def infer_tts(tokenizer, model, text):
     with torch.no_grad():
         outputs = model(**inputs)
 
-    waveform = outputs.waveform[0]
+    waveform = outputs.waveform[0].numpy()
     return waveform
 
 
