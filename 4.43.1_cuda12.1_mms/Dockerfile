@@ -15,4 +15,6 @@ RUN pip install --no-cache-dir \
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY mms_asr_poll /usr/bin/
+COPY mms_lid_poll /usr/bin/
+COPY mms_tts_poll /usr/bin/
 COPY *.py /opt/mms/

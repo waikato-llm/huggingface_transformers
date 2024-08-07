@@ -2,20 +2,20 @@ import argparse
 import os
 import traceback
 from sfp import Poller
-from mms_common import load_asr, infer_asr, load_audio
+from mms_common import load_tts, infer_tts, save_audio
 
 
-SUPPORTED_EXTS = [".wav", ".mp3"]
+SUPPORTED_EXTS = [".txt"]
 """ supported file extensions (lower case with dot). """
 
 
 def process_sample(fname, output_dir, poller):
     """
-    Method for processing an audio file.
+    Method for processing a text file.
 
-    :param fname: the audio file to process
+    :param fname: the text file to process
     :type fname: str
-    :param output_dir: the directory to write the audio file to
+    :param output_dir: the directory to write the text file to
     :type output_dir: str
     :param poller: the Poller instance that called the method
     :type poller: Poller
@@ -24,29 +24,28 @@ def process_sample(fname, output_dir, poller):
     """
     result = []
     try:
-        output = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], ".txt")
-        sample = load_audio(fname)
-        transcript = infer_asr(poller.params.processor, poller.params.model, sample)
-        with open(output, "w") as fp:
-            fp.write(transcript)
+        output = "{}/{}{}".format(output_dir, os.path.splitext(os.path.basename(fname))[0], ".wav")
+        with open(fname, "r") as fp:
+            lines = fp.readlines()
+        text = "\n".join(lines).strip()
+        sample = infer_tts(poller.params.processor, poller.params.model, text)
+        save_audio(sample, output)
         result.append(output)
     except KeyboardInterrupt:
         poller.keyboard_interrupt()
     except:
-        poller.error("Failed to process audio file: %s\n%s" % (fname, traceback.format_exc()))
+        poller.error("Failed to process text file: %s\n%s" % (fname, traceback.format_exc()))
     return result
 
 
-def predict_on_samples(model_id, target_lang, input_dir, output_dir, tmp_dir=None,
+def predict_on_samples(model_id, input_dir, output_dir, tmp_dir=None,
                        poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
                        delete_input=False, verbose=False, quiet=False):
     """
-    Performs inference on audio files found in input_dir and outputs the transcribed text files in output_dir.
+    Generates audio from text files found in input_dir and outputs the audio files in output_dir.
 
     :param model_id: the checkpoint file to use
     :type model_id: str
-    :param target_lang: the language to transcribe
-    :type target_lang: str
     :param input_dir: the directory with the audio files
     :type input_dir: str
     :param output_dir: the output directory to move the audio files to and store the predictions
@@ -69,8 +68,8 @@ def predict_on_samples(model_id, target_lang, input_dir, output_dir, tmp_dir=Non
     :type quiet: bool
     """
     if verbose:
-        print("Loading model: %s/%s" % (model_id, target_lang))
-    processor, model = load_asr(model_id, target_lang)
+        print("Loading model: %s" % model_id)
+    processor, model = load_tts(model_id)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -99,24 +98,23 @@ def main(args=None):
     """
 
     parser = argparse.ArgumentParser(
-        description="MMS - ASR/Transcription (file-polling)",
-        prog="mms_asr_poll",
+        description="MMS - TTS/audio synthesis (file-polling)",
+        prog="mms_tts_poll",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--model', metavar="ID", type=str, required=False, default="facebook/mms-1b-all", help='The MMS ASR model to use.')
-    parser.add_argument('--lang', metavar="LANG", type=str, required=False, default="eng", help='The language to transcribe.')
-    parser.add_argument('--prediction_in', help='Path to the audio files to process', required=True, default=None)
-    parser.add_argument('--prediction_out', help='Path to the folder for the transcription files', required=True, default=None)
-    parser.add_argument('--prediction_tmp', help='Path to the temporary folder for the transcription files', required=False, default=None)
+    parser.add_argument('--model', metavar="ID", type=str, required=False, default="facebook/mms-tts-eng", help='The MMS TTS model to use.')
+    parser.add_argument('--prediction_in', help='Path to the text files to process', required=True, default=None)
+    parser.add_argument('--prediction_out', help='Path to the folder for the generated audio files', required=True, default=None)
+    parser.add_argument('--prediction_tmp', help='Path to the temporary folder for the generated audio files', required=False, default=None)
     parser.add_argument('--poll_wait', type=float, help='poll interval in seconds when not using watchdog mode', required=False, default=1.0)
     parser.add_argument('--continuous', action='store_true', help='Whether to continuously load audio files and perform prediction', required=False, default=False)
     parser.add_argument('--use_watchdog', action='store_true', help='Whether to react to file creation events rather than performing fixed-interval polling', required=False, default=False)
     parser.add_argument('--watchdog_check_interval', type=float, help='check interval in seconds for the watchdog', required=False, default=10.0)
-    parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input audio files rather than move them to --prediction_out directory', required=False, default=False)
+    parser.add_argument('--delete_input', action='store_true', help='Whether to delete the input text files rather than move them to --prediction_out directory', required=False, default=False)
     parser.add_argument('--verbose', action='store_true', help='Whether to output more logging info', required=False, default=False)
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
     parsed = parser.parse_args(args=args)
 
-    predict_on_samples(parsed.model, parsed.lang, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
+    predict_on_samples(parsed.model, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
                        poll_wait=parsed.poll_wait, continuous=parsed.continuous,
                        use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
                        delete_input=parsed.delete_input, verbose=parsed.verbose,

@@ -132,6 +132,8 @@ docker run --rm --pull=always \
 ## Scripts
 
 * `mms_asr_poll` - for transcribing audio files
+* `mms_lid_poll` - for determining the language of audio files
+* `mms_tts_poll` - for generating audio files from text files
 
 When using Redis, make sure to include `--net=host` in your command-line when spinning up the docker image. 
 
