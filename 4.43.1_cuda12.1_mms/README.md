@@ -4,6 +4,8 @@ Docker image for [Huggingface transformers](https://github.com/huggingface/trans
 
 Uses PyTorch 2.3.0, CUDA 12.1.
 
+**TODO:** Does not run on the GPU yet. 
+
 ## Quick start
 
 ### Inhouse registry
@@ -131,9 +133,9 @@ docker run --rm --pull=always \
 
 ## Scripts
 
-* `mms_asr_poll` - for transcribing audio files
-* `mms_lid_poll` - for determining the language of audio files
-* `mms_tts_poll` - for generating audio files from text files
+* `mms_asr_poll` - for transcribing audio files ([available models](https://huggingface.co/docs/transformers/main/en/model_doc/mms#automatic-speech-recognition-asr))
+* `mms_lid_poll` - for determining the language of audio files ([available models](https://huggingface.co/docs/transformers/main/en/model_doc/mms#language-identification-lid))
+* `mms_tts_poll` - for generating audio files from text files ([available models](https://huggingface.co/models?sort=trending&search=facebook%2Fmms-tts))
 
 When using Redis, make sure to include `--net=host` in your command-line when spinning up the docker image. 
 
