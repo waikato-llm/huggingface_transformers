@@ -10,7 +10,7 @@ from transformers import Wav2Vec2ForCTC, AutoProcessor
 from transformers import Wav2Vec2ForSequenceClassification, AutoFeatureExtractor
 
 
-def load_asr(model_id, target_lang, device_map="auto"):
+def load_asr(model_id, target_lang):
     """
     Loads the ASR processor and model.
 
@@ -18,14 +18,12 @@ def load_asr(model_id, target_lang, device_map="auto"):
     :type model_id: str
     :param target_lang: the language to transcribe, e.g., eng or fra
     :type target_lang: str
-    :param device_map: the device to run on, e.g., auto or cuda or cpu
-    :type device_map: str
     :return: the tuple of processor and model
     :rtype: tuple
     """
     print("Loading ASR: %s/%s" % (model_id, target_lang))
     processor = AutoProcessor.from_pretrained(model_id, target_lang=target_lang)
-    model = Wav2Vec2ForCTC.from_pretrained(model_id, target_lang=target_lang, ignore_mismatched_sizes=True, device_map=device_map)
+    model = Wav2Vec2ForCTC.from_pretrained(model_id, target_lang=target_lang, ignore_mismatched_sizes=True)
     return processor, model
 
 
@@ -49,20 +47,18 @@ def infer_asr(processor, model, sample):
     return transcription
 
 
-def load_tts(model_id, device_map="auto"):
+def load_tts(model_id):
     """
     Loads the TTS tokenizer and model.
 
     :param model_id: the ID of the model to use, e.g., facebook/mms-tts-eng
     :type model_id: str
-    :param device_map: the device to run on, e.g., auto or cuda or cpu
-    :type device_map: str
     :return: the tuple of tokenizer and model
     :rtype: tuple
     """
     print("Loading TTS: %s" % model_id)
     tokenizer = VitsTokenizer.from_pretrained(model_id)
-    model = VitsModel.from_pretrained(model_id, device_map=device_map)
+    model = VitsModel.from_pretrained(model_id)
     return tokenizer, model
 
 
@@ -87,19 +83,17 @@ def infer_tts(tokenizer, model, text):
     return waveform
 
 
-def load_lid(model_id, device_map="auto"):
+def load_lid(model_id):
     """
     Loads the language ID (LID) processor and model.
 
     :param model_id: the model ID to use, e.g., facebook/mms-lid-126
     :type model_id: str
-    :param device_map: the device to run on, e.g., auto or cuda or cpu
-    :type device_map: str
     :return: the tuple of processor and model
     :rtype: tuple
     """
     processor = AutoFeatureExtractor.from_pretrained(model_id)
-    model = Wav2Vec2ForSequenceClassification.from_pretrained(model_id, device_map=device_map)
+    model = Wav2Vec2ForSequenceClassification.from_pretrained(model_id)
     return processor, model
 
 
@@ -136,7 +130,8 @@ def load_audio(audio_file, sampling_rate=16000):
     audio_dataset = Dataset.from_dict({
         "audio": [audio_file]
     }).cast_column("audio", Audio(sampling_rate=sampling_rate))
-    return audio_dataset[0]["audio"]
+    result = audio_dataset[0]["audio"]["array"]
+    return result
 
 
 def save_audio(sample, audio_file, sampling_rate=16000):

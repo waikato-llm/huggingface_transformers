@@ -37,7 +37,7 @@ def process_sample(fname, output_dir, poller):
     return result
 
 
-def predict_on_samples(model_id, target_lang, device, input_dir, output_dir, tmp_dir=None,
+def predict_on_samples(model_id, target_lang, input_dir, output_dir, tmp_dir=None,
                        poll_wait=1.0, continuous=False, use_watchdog=False, watchdog_check_interval=10.0,
                        delete_input=False, verbose=False, quiet=False):
     """
@@ -47,8 +47,6 @@ def predict_on_samples(model_id, target_lang, device, input_dir, output_dir, tmp
     :type model_id: str
     :param target_lang: the language to transcribe
     :type target_lang: str
-    :param device: the device to run the model on, e.g., 'auto' or 'cpu' or 'cuda:0'
-    :type device: str
     :param input_dir: the directory with the audio files
     :type input_dir: str
     :param output_dir: the output directory to move the audio files to and store the predictions
@@ -71,8 +69,8 @@ def predict_on_samples(model_id, target_lang, device, input_dir, output_dir, tmp
     :type quiet: bool
     """
     if verbose:
-        print("Loading model: %s/%s/%s" % (model_id, target_lang, device))
-    processor, model = load_asr(model_id, target_lang, device_map=device)
+        print("Loading model: %s/%s" % (model_id, target_lang))
+    processor, model = load_asr(model_id, target_lang)
 
     poller = Poller()
     poller.input_dir = input_dir
@@ -106,7 +104,6 @@ def main(args=None):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--model', metavar="ID", type=str, required=False, default="facebook/mms-1b-all", help='The MMS model to use.')
     parser.add_argument('--lang', metavar="LANG", type=str, required=False, default="eng", help='The language to transcribe.')
-    parser.add_argument('--device', metavar="DEVICE", type=str, default="auto", help='The device to run the model on, e.g., auto or cuda or cpu.')
     parser.add_argument('--prediction_in', help='Path to the audio files to process', required=True, default=None)
     parser.add_argument('--prediction_out', help='Path to the folder for the prediction files', required=True, default=None)
     parser.add_argument('--prediction_tmp', help='Path to the temporary folder for the prediction files', required=False, default=None)
@@ -119,7 +116,7 @@ def main(args=None):
     parser.add_argument('--quiet', action='store_true', help='Whether to suppress output', required=False, default=False)
     parsed = parser.parse_args(args=args)
 
-    predict_on_samples(parsed.model, parsed.lang, parsed.device, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
+    predict_on_samples(parsed.model, parsed.lang, parsed.prediction_in, parsed.prediction_out, tmp_dir=parsed.prediction_tmp,
                        poll_wait=parsed.poll_wait, continuous=parsed.continuous,
                        use_watchdog=parsed.use_watchdog, watchdog_check_interval=parsed.watchdog_check_interval,
                        delete_input=parsed.delete_input, verbose=parsed.verbose,
